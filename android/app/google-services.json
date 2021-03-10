@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "472083318950",
+    "project_id": "decentragram",
+    "storage_bucket": "decentragram.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472083318950:android:a1d89ae80c04a29addcc67",
+        "android_client_info": {
+          "package_name": "com.dhiraj.decentragram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472083318950-v3km07clgc31lopm2kpuq16qt1hjn8ha.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dhiraj.decentragram",
+            "certificate_hash": "e308625c1b76967b6d6b97ee53d6cba380117002"
+          }
+        },
+        {
+          "client_id": "472083318950-573rcg35b5bo8kgapv2hrefsloheg5i1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4TZLIWXhudT47Ajk7qp1n_U5-SMPR40A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472083318950-573rcg35b5bo8kgapv2hrefsloheg5i1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
