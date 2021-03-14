@@ -34,9 +34,14 @@ class FirestoreRepository {
     await ref
         .where("email", isEqualTo: email)
         .get()
-        .then((value) => {
-          docRef = value.docs[0].reference
-        });
+        .then((value) => {docRef = value.docs[0].reference});
     docRef.update(json);
+  }
+
+  Future<bool> userExists() async {
+    String uid = auth.currentUser.uid;
+    var querySnapshot = await ref.where("uid", isEqualTo: uid).get();
+    var docsLength = querySnapshot.docs.length;
+    return docsLength == 0 ? false : true;
   }
 }

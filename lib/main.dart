@@ -1,31 +1,81 @@
+import 'package:decentragram/features/auth/data/user_repository.dart';
+import 'package:decentragram/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_bloc/auth_events.dart';
+import 'features/auth/presentation/bloc/auth_bloc/auth_states.dart';
+import 'features/auth/presentation/screens/Login_Screen.dart';
+import 'features/auth/presentation/screens/splash_screen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(HomePage());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final UserRepository _userRepository = UserRepository();
+  AuthBloc _authBloc;
+  //An instance of user_Repository and AuthBloc is created
+  @override
+  void initState() {
+    super.initState();
+    _authBloc = AuthBloc(repository: _userRepository);
+    _authBloc.add(AppStarted());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    // ignore: always_specify_types
+    return BlocProvider(
+      create: (BuildContext context) => _authBloc,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.from(
+            textTheme:
+                GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
+            colorScheme: ColorScheme(
+                primary: Color(0xFFf4511e),
+                primaryVariant: Color(0xffb91400),
+                secondary: Color(0xFF616161),
+                secondaryVariant: Color(0xFF373737),
+                surface: Color(0xFFF2F2F2),
+                background: Color(0xFFF2F2F2),
+                error: Color(0xffad1457),
+                onPrimary: Colors.black54,
+                onSecondary: Colors.black87,
+                onSurface: Colors.black54,
+                onBackground: Colors.black87,
+                onError: Colors.black87,
+                brightness: Brightness.light)),
+        home: BlocBuilder<AuthBloc, AuthState>(
+            bloc: _authBloc,
+            builder: (BuildContext context, AuthState state) {
+              if (state is AppStarted) return SplashScreen();
+              if (state is Authenticated)
+                return HomeScreen(   
+                  userRepository: _userRepository,
+                );
+              if (state is Unauthenticated)
+                return LoginScreen(userRepository: _userRepository);
+              return Container();
+            }),
+      ),
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
- 
-  @override
-  Widget build(BuildContext context) {
-    
+  void dispose() {
+    _authBloc.close();
+    super.dispose();
   }
 }

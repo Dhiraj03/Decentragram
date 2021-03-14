@@ -95,11 +95,11 @@ class _RegisterFormState extends State<RegisterForm> {
                         }),
                   ),
                   SizedBox(height: 80),
-                  Container(
-                      height: 100,
-                      width: 100,
-                      child: Image.asset("assets/app_icon.png",
-                          fit: BoxFit.contain)),
+                  // Container(
+                  //     height: 100,
+                  //     width: 100,
+                  //     child: Image.asset("assets/app_icon.png",
+                  //         fit: BoxFit.contain)),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
