@@ -22,6 +22,7 @@ class UserRepository {
     final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
     await _firebaseAuth.signInWithCredential(credential);
+    firestoreRepository.createNewUser(googleUser.email);
     return _firebaseAuth.currentUser;
   }
 

@@ -2,9 +2,11 @@ import 'package:decentragram/features/auth/data/user_repository.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_barrel_bloc.dart';
 import 'package:decentragram/features/auth/presentation/bloc/login_bloc/login_barrel_file.dart';
 import 'package:decentragram/features/auth/presentation/widgets/create_account_button.dart';
+import 'package:decentragram/features/auth/presentation/widgets/google_sign_in_button.dart';
 import 'package:decentragram/features/auth/presentation/widgets/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 //the LoginForm widget is made Stateful so as to handle the TextEditingControllers' state.
 class LoginForm extends StatefulWidget {
@@ -131,9 +133,13 @@ class _LoginFormState extends State<LoginForm> {
                                   ? _onFormSubmitted
                                   : null,
                             ),
+                            GoogleSignInButton(
+                              onPressed: _googleSignIn,
+                            ),
                             CreateAccountButton(
                                 userRepository: _userRepository),
-                          ]))
+                          ])),
+                  
                 ],
               )),
             );
@@ -171,5 +177,10 @@ class _LoginFormState extends State<LoginForm> {
         email: _emailController.text, 
         password: _passwordController.text)
     );
+  }
+
+  void _googleSignIn()
+  {
+    _loginBloc.add(LoginWithGooglePressed());
   }
 }
