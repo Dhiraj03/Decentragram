@@ -98,10 +98,10 @@ class _LoginFormState extends State<LoginForm> {
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Container(height: 110),
                   ),
-                  // Container(
-                  //   height: 100,
-                  //   width: 100,
-                  //   child: Image.asset("assets/app_icon.png", fit: BoxFit.contain)),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset("assets/app_icon.png", fit: BoxFit.contain)),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
