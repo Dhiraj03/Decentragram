@@ -3,7 +3,10 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:decentragram/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class FirestoreRepository {
   static final firestoreRepository = FirebaseFirestore.instance;
@@ -15,7 +18,12 @@ class FirestoreRepository {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   void createNewUser(String email) {
-    var uid = ref.add(<String, dynamic>{"email": email});
+    var privateKey = generateNewPrivateKey(Random.secure());
+    var uid = ref.add(<String, dynamic>{
+      "email": email,
+      "address": EthereumAddress.fromPublicKey(privateKeyToPublic(privateKey))
+          .toString()
+    });
   }
 
   Future<bool> doesUserDataExist() async {
@@ -43,5 +51,12 @@ class FirestoreRepository {
     var querySnapshot = await ref.where("uid", isEqualTo: uid).get();
     var docsLength = querySnapshot.docs.length;
     return docsLength == 0 ? false : true;
+  }
+
+  Future<UserModel> getUser() async {
+    String email = auth.currentUser.email;
+    var querySnapshot = await ref.where("email", isEqualTo: email).get();
+    var doc = querySnapshot.docs[0];
+    return UserModel.fromJson(doc.data());
   }
 }

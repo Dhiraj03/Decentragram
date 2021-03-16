@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                 );
               if (state is Unauthenticated)
                 return LoginScreen(userRepository: _userRepository);
-              return Container();
+              return Container(); 
             }),
       ),
     );

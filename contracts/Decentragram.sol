@@ -48,10 +48,11 @@ contract Decentragram {
         _;
     }
     
-    function createProfile(address userAddress, string memory username) public checkUserDoesntExists(userAddress){
+    function createProfile(address userAddress, string memory username, string memory dpIpfsHash) public checkUserDoesntExists(userAddress){
         userCount++;
         users[userAddress].id = userCount;
         users[userAddress].username = username;
+        users[userAddress].dpIpfsHash = dpIpfsHash;
     }
     
     function getUserProfile(address userAddress) public checkUserExists(userAddress) view 
