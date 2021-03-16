@@ -14,7 +14,7 @@ part 'new_user_profile_state.dart';
 
 class NewUserProfileBloc
     extends Bloc<NewUserProfileEvent, NewUserProfileState> {
-  NewUserProfileState get initialState => NewUserProfileInitial();
+  NewUserProfileState get initialState => NewUserProfileInitial(image: null);
   File image;
   ImagePicker imagePicker = ImagePicker();
   RemoteDataSource backend = RemoteDataSource();
@@ -24,13 +24,17 @@ class NewUserProfileBloc
   ) async* {
     if (event is SaveProfileImage) {
       image = await pickImage();
-      yield NewUserProfileInitial();
+      yield NewUserProfileInitial(image: image);
     } else if (event is SubmitForm) {
-      print('lol');
       var response = await backend.addUser(event.username, image);
-      yield response.fold((l) => SubmittedProfile(message: l.message),
-          (r) => SubmittedProfile(message: r));
-      yield NewUserProfileInitial();
+      yield* response.fold((failure) async* {
+        yield SubmittedProfile(message: failure.message);
+        yield NewUserProfileInitial(image: image);
+      }, (success) async* {
+        
+        yield SubmittedProfile(message: success);
+        yield RedirectToDashboard();
+      });
     }
   }
 

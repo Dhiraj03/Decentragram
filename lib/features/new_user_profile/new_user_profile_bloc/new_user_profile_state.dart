@@ -7,7 +7,12 @@ abstract class NewUserProfileState extends Equatable {
   List<Object> get props => [];
 }
 
-class NewUserProfileInitial extends NewUserProfileState {}
+class NewUserProfileInitial extends NewUserProfileState {
+  File image;
+  NewUserProfileInitial({@required this.image});
+  @override
+  List<Object> get props => [image];
+}
 
 class RedirectToDashboard extends NewUserProfileState {}
 

@@ -22,35 +22,19 @@ class FirestoreRepository {
     var uid = ref.add(<String, dynamic>{
       "email": email,
       "address": EthereumAddress.fromPublicKey(privateKeyToPublic(privateKey))
-          .toString()
+          .toString(),
+      "profileExists": false
     });
   }
 
-  Future<bool> doesUserDataExist() async {
-    String userID = auth.currentUser.uid;
-    var docs = await ref.where("uid", isEqualTo: userID).get();
-    if (docs.docs.length == 0)
-      return false;
-    else
-      return true;
-  }
-
-  Future<void> saveInitialProfile(Map<String, dynamic> json) async {
-    String email = auth.currentUser.email;
-    json["uid"] = auth.currentUser.uid;
-    var docRef;
-    await ref
-        .where("email", isEqualTo: email)
-        .get()
-        .then((value) => {docRef = value.docs[0].reference});
-    docRef.update(json);
-  }
-
   Future<bool> userExists() async {
-    String uid = auth.currentUser.uid;
-    var querySnapshot = await ref.where("uid", isEqualTo: uid).get();
-    var docsLength = querySnapshot.docs.length;
-    return docsLength == 0 ? false : true;
+    String email = auth.currentUser.email;
+    var querySnapshot = await ref.where("email", isEqualTo: email).get();
+    var doc = querySnapshot.docs[0];
+    if (doc.get("profileExists"))
+      return true;
+    else
+      return false;
   }
 
   Future<UserModel> getUser() async {
@@ -58,5 +42,14 @@ class FirestoreRepository {
     var querySnapshot = await ref.where("email", isEqualTo: email).get();
     var doc = querySnapshot.docs[0];
     return UserModel.fromJson(doc.data());
+  }
+
+  void initialProfileSaved() async {
+    String email = auth.currentUser.email;
+    var querySnapshot = await ref.where("email", isEqualTo: email).get();
+    var docRef = querySnapshot.docs[0].reference;
+    docRef.update({
+      "profileExists" : true
+    });
   }
 }

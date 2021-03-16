@@ -29,10 +29,17 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
         body: BlocProvider<NewUserProfileBloc>(
           create: (context) => bloc,
           child: BlocConsumer<NewUserProfileBloc, NewUserProfileState>(
-              builder: (BuildContext context, NewUserProfileState state) {
+              buildWhen: (NewUserProfileState prevState,
+                  NewUserProfileState currState) {
+            if (prevState is NewUserProfileInitial &&
+                currState is SubmittedProfile) {
+              return false;
+            }
+            return true;
+          }, builder: (BuildContext context, NewUserProfileState state) {
             if (state is RedirectToDashboard)
               return DashboardScreen();
-            else
+            else if (state is NewUserProfileInitial)
               return Container(
                 child: ListView(
                   padding: stdPadding,
@@ -46,14 +53,14 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
                           height: 200,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: bloc.image == null
+                              image: state.image == null
                                   ? DecorationImage(
-                                      image: AssetImage(
-                                          "assets/person_icon.png"),
+                                      image:
+                                          AssetImage("assets/person_icon.png"),
                                       fit: BoxFit.cover,
                                       alignment: Alignment.topCenter)
                                   : DecorationImage(
-                                      image: FileImage(File(bloc.image.path)),
+                                      image: FileImage(File(state.image.path)),
                                       fit: BoxFit.cover,
                                       alignment: Alignment.topCenter),
                               border: Border.all(
@@ -85,9 +92,12 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
                     ),
                     Center(
                       child: FlatButton(
-                          color: Theme.of(context).primaryColor.withAlpha(220),child: Text('Save Profile'),
+                          color: Theme.of(context).primaryColor.withAlpha(220),
+                          child: Text('Save Profile'),
                           onPressed: () {
-                            BlocProvider.of<NewUserProfileBloc>(context)..add(SubmitForm(username: usernameController.text));
+                            BlocProvider.of<NewUserProfileBloc>(context)
+                              ..add(SubmitForm(
+                                  username: usernameController.text));
                           }),
                     )
                   ],
