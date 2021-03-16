@@ -4,7 +4,7 @@ import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_events.dart';
-import 'package:decentragram/features/auth/presentation/dashboard_screen.dart';
+import 'package:decentragram/features/dashboard_screen.dart';
 import 'package:decentragram/features/new_user_profile/new_user_profile_bloc/new_user_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,10 +22,14 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.backspace),
-              onPressed: () =>
-                  BlocProvider.of<AuthBloc>(context)..add(LoggedOut())),
+          title: Text("Save Profile"),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(FlutterIcons.log_out_fea),
+                onPressed: () =>
+                    BlocProvider.of<AuthBloc>(context)..add(LoggedOut()))
+          ],
         ),
         body: BlocProvider<NewUserProfileBloc>(
           create: (context) => bloc,
@@ -88,11 +92,12 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
                         controller: usernameController,
                         decoration: InputDecoration(
                             icon: Icon(FlutterIcons.person_mdi),
-                            labelText: "Name"),
+                            labelText: "Username"),
                       ),
                     ),
                     Center(
                       child: FlatButton(
+                        shape: flatButtonBorder,
                           color: Theme.of(context).primaryColor.withAlpha(220),
                           child: Text('Save Profile'),
                           onPressed: () {
@@ -107,11 +112,12 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
           }, listener: (BuildContext context, NewUserProfileState state) {
             if (state is Success) {
               Scaffold.of(context).showSnackBar(SnackBar(
-                  backgroundColor: successColor, content: Text("Success! Transaction Hash: " + state.txHash)));
-            } else if (state is Failure)
-            {
+                  backgroundColor: successColor,
+                  content: Text("Success! Transaction Hash: " + state.txHash)));
+            } else if (state is Failure) {
               Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: successColor, content: Text("Failure! " + state.errorMessage)));
+                  backgroundColor: successColor,
+                  content: Text("Failure! " + state.errorMessage)));
             }
           }),
         ));

@@ -1,6 +1,6 @@
 import 'package:decentragram/features/auth/data/user_repository.dart';
 import 'package:decentragram/features/auth/presentation/bloc/new_user_bloc/new_user_bloc.dart';
-import 'package:decentragram/features/auth/presentation/dashboard_screen.dart';
+import 'package:decentragram/features/dashboard_screen.dart';
 import 'package:decentragram/features/new_user_profile/new_user_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
