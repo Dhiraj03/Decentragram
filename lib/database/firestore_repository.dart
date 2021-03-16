@@ -30,6 +30,7 @@ class FirestoreRepository {
   Future<bool> userExists() async {
     String email = auth.currentUser.email;
     var querySnapshot = await ref.where("email", isEqualTo: email).get();
+    if (querySnapshot.docs.length == 0) return false;
     var doc = querySnapshot.docs[0];
     if (doc.get("profileExists"))
       return true;
@@ -48,8 +49,6 @@ class FirestoreRepository {
     String email = auth.currentUser.email;
     var querySnapshot = await ref.where("email", isEqualTo: email).get();
     var docRef = querySnapshot.docs[0].reference;
-    docRef.update({
-      "profileExists" : true
-    });
+    docRef.update({"profileExists": true});
   }
 }

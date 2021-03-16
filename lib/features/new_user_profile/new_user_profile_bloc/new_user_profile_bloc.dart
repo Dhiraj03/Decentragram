@@ -28,11 +28,10 @@ class NewUserProfileBloc
     } else if (event is SubmitForm) {
       var response = await backend.addUser(event.username, image);
       yield* response.fold((failure) async* {
-        yield SubmittedProfile(message: failure.message);
+        yield Failure(errorMessage: failure.message);
         yield NewUserProfileInitial(image: image);
       }, (success) async* {
-        
-        yield SubmittedProfile(message: success);
+        yield Success(txHash: success);
         yield RedirectToDashboard();
       });
     }

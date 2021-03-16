@@ -16,9 +16,16 @@ class NewUserProfileInitial extends NewUserProfileState {
 
 class RedirectToDashboard extends NewUserProfileState {}
 
-class SubmittedProfile extends NewUserProfileState {
-  String message;
-  SubmittedProfile({@required this.message});
+class Success extends NewUserProfileState {
+  String txHash;
+  Success({@required this.txHash});
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [txHash];
+}
+
+class Failure extends NewUserProfileState {
+  String errorMessage;
+  Failure({@required this.errorMessage});
+  @override
+  List<Object> get props => [errorMessage];
 }

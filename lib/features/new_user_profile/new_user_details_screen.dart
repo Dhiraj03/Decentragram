@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_events.dart';
@@ -32,7 +33,7 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
               buildWhen: (NewUserProfileState prevState,
                   NewUserProfileState currState) {
             if (prevState is NewUserProfileInitial &&
-                currState is SubmittedProfile) {
+                (currState is Success || currState is Failure)) {
               return false;
             }
             return true;
@@ -104,9 +105,13 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
                 ),
               );
           }, listener: (BuildContext context, NewUserProfileState state) {
-            if (state is SubmittedProfile) {
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+            if (state is Success) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  backgroundColor: successColor, content: Text("Success! Transaction Hash: " + state.txHash)));
+            } else if (state is Failure)
+            {
+              Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: successColor, content: Text("Failure! " + state.errorMessage)));
             }
           }),
         ));

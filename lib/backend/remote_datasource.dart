@@ -5,7 +5,7 @@ import 'package:decentragram/core/errors.dart';
 import 'package:decentragram/database/firestore_repository.dart';
 import 'package:decentragram/models/user_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 
 class RemoteDataSource {
   var dioClient = Dio();
@@ -41,8 +41,7 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      // print(response.statusMessage);
-
+      repo.initialProfileSaved();
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
       print(e.response);
