@@ -71,9 +71,26 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                     ),
                   ),
                 if (state is UserFound)
-                  ListTile(
-                    leading: state.user.profileImage,
-                  )
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: MemoryImage(state.user.profileImage),
+                      ),
+                      title: Text(state.user.username),
+                      subtitle: Text(
+                        state.user.userAddress,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                if (state is Loading)
+                  Padding(
+                      padding: EdgeInsets.only(top: 60),
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(grey),
+                      ))
               ]);
             },
             listener: (BuildContext context, UserState state) {},

@@ -22,3 +22,8 @@ class Failure extends UserState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class Loading extends UserState {
+  @override
+  List<Object> get props => [];
+}

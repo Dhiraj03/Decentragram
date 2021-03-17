@@ -61,9 +61,9 @@ class RemoteDataSource {
             options: Options(
       responseDecoder: (responseBytes, options, responseBody) {
         print(responseBytes);
-        image = Image.memory(responseBytes);
+        image = responseBytes;
       },
     ));
-    return UserModel(username: username, profileImage: image);
+    return UserModel(username: username, profileImage: image, userAddress: address);
   }
 }

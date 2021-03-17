@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserModel {
-  Image profileImage;
+  var profileImage;
   String username;
   String userAddress;
   UserModel({this.profileImage, this.userAddress, this.username});
