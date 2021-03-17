@@ -8,4 +8,11 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(userAddress: json["address"]);
   }
+
+  factory UserModel.basic(Map<String, dynamic> json) {
+    return UserModel(
+      userAddress: json["address"],
+      username: json["username"]
+    );
+  }
 }

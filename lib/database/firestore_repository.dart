@@ -51,4 +51,19 @@ class FirestoreRepository {
     var docRef = querySnapshot.docs[0].reference;
     docRef.update({"profileExists": true});
   }
+
+  //Search for a user in the network with the use of their "username" and return their Ethereum User Address
+  Future<String> searchUser(String username) async {
+    var querySnapshot = await ref.where("username", isEqualTo: username).get();
+    if (querySnapshot.size != 0) {
+      return querySnapshot.docs[0].data()["address"];
+    } else
+      return null;
+  }
+
+  //Check if the username entered by the username already exists - Return true if it exists
+  Future<bool> duplicateUsername(String username) async {
+    var querySnapshot = await ref.where("username", isEqualTo: username).get();
+    return (querySnapshot.size == 0) ? false : true;
+  }
 }
