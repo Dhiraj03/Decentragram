@@ -1,6 +1,6 @@
 import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
-import 'package:decentragram/features/user_features/search_user.dart';
+import 'package:decentragram/features/user_features/search_user_screen.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
 import 'package:decentragram/features/user_features/user_feed_screen.dart';
 import 'package:flutter/material.dart';

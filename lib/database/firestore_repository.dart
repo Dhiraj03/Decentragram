@@ -45,18 +45,21 @@ class FirestoreRepository {
     return UserModel.fromJson(doc.data());
   }
 
-  void initialProfileSaved() async {
+  void initialProfileSaved(String username) async {
     String email = auth.currentUser.email;
     var querySnapshot = await ref.where("email", isEqualTo: email).get();
     var docRef = querySnapshot.docs[0].reference;
-    docRef.update({"profileExists": true});
+    docRef.update({"profileExists": true, "username" : username});
   }
 
   //Search for a user in the network with the use of their "username" and return their Ethereum User Address
   Future<String> searchUser(String username) async {
+    print('inside');
     var querySnapshot = await ref.where("username", isEqualTo: username).get();
     if (querySnapshot.size != 0) {
-      return querySnapshot.docs[0].data()["address"];
+      print('lmao');
+      print(querySnapshot.docs[0].get("address"));
+      return querySnapshot.docs[0].get("address");
     } else
       return null;
   }

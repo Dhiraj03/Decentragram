@@ -16,8 +16,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserEvent event,
   ) async* {
     if (event is SearchUser) {
+      print('searching');
+      print(event.username);
       String result = await repo.searchUser(event.username);
-      print("User Address:" + result);
       if (result == null) {
         yield Failure(errorMessage: "User not found!");
       } else

@@ -5,3 +5,5 @@ const EdgeInsets stdPadding =
 ShapeBorder flatButtonBorder =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(5));
 const EdgeInsets iconMargin = EdgeInsets.zero;
+const EdgeInsets searchBarPadding =
+    EdgeInsets.only(left: 15, top: 50, right: 15);

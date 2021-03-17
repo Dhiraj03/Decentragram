@@ -41,7 +41,7 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      repo.initialProfileSaved();
+      repo.initialProfileSaved(username);
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
       print(e.response);
