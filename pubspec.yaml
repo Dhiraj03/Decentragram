@@ -41,6 +41,7 @@ dependencies:
   web3dart: ^1.2.3
   dio: ^3.0.10
   dartz: ^0.9.2
+  path_provider: ^1.5.1
 
 dev_dependencies:
   flutter_test:
