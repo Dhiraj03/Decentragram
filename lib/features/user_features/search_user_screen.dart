@@ -70,7 +70,10 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                           ),
                         ),
                     )
-                    : Text('lol')
+                    : Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top:20),
+                      child: Text("lol"),
+                      )
               ]);
             },
             listener: (BuildContext context, UserState state) {},

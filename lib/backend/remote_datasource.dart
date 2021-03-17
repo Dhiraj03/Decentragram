@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 class RemoteDataSource {
   var dioClient = Dio();
   String url =
-      'https://mainnet-api.maticvigil.com/v1.0/contract/0xf0c7f1f08e32a8e5a23e7744bca93a066a5e25bb';
+      'https://mainnet-api.maticvigil.com/v1.0/contract/0x744b5793d54795c55c65ffcfa4feec6d17208d89';
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
   FirestoreRepository repo = FirestoreRepository();
+
+
   Future<Either<ErrorMessage, String>> addUser(
       String username, File profileImage) async {
     final Map<String, dynamic> map = {
@@ -48,4 +50,9 @@ class RemoteDataSource {
       return Left(ErrorMessage(message: "Error!"));
     }
   }
+
+  // Future<UserModel> getUser(String address)
+  //  async {
+  //    var response = await dioClient.
+  //  }
 }

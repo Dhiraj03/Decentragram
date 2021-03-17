@@ -58,10 +58,11 @@ contract Decentragram {
     function getUserProfile(address userAddress) public checkUserExists(userAddress) view 
     returns (
         uint256 id,
-        string memory username
+        string memory username,
+        string memory dpIpfsHash
         )
     {
-        return (users[userAddress].id, users[userAddress].username);
+        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash);
     }
     
     function getPostCount(address userAddress) public checkUserExists(userAddress) view
