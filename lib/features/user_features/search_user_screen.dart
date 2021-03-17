@@ -42,38 +42,38 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                   controller: searchController,
                   autofocus: true,
                 ),
-                state is Failure
-                    ? Padding(
-                      padding:  EdgeInsets.only(left: 10.0, right: 10, top: 30),
-                      child: Center(
-                          child: Column(
-                            children: [
-                              Image(
-                                height: 80,
-                                image: AssetImage(
-                                  "assets/code-error.png",
-                                ),
-                                color: grey,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "Sorry, we could not find the user you are looking for.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: grey,
-                                ),
-                              )
-                            ],
+                if (state is Failure)
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0, right: 10, top: 30),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Image(
+                            height: 80,
+                            image: AssetImage(
+                              "assets/code-error.png",
+                            ),
+                            color: grey,
                           ),
-                        ),
-                    )
-                    : Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10, top:20),
-                      child: Text("lol"),
-                      )
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Sorry, we could not find the user you are looking for.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                if (state is UserFound)
+                  ListTile(
+                    leading: state.user.profileImage,
+                  )
               ]);
             },
             listener: (BuildContext context, UserState state) {},

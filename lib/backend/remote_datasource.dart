@@ -15,7 +15,6 @@ class RemoteDataSource {
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
   FirestoreRepository repo = FirestoreRepository();
 
-
   Future<Either<ErrorMessage, String>> addUser(
       String username, File profileImage) async {
     final Map<String, dynamic> map = {
@@ -51,8 +50,19 @@ class RemoteDataSource {
     }
   }
 
-  // Future<UserModel> getUser(String address)
-  //  async {
-  //    var response = await dioClient.
-  //  }
+  Future<UserModel> getUser(String address) async {
+    var response = await dioClient.get(url + "/getUserProfile/$address");
+    var ipfsHash = response.data["data"][0]["dpIpfsHash"];
+    var image;
+    var username = response.data["data"][0]["username"];
+    var ipfsResponse = await dioClient
+        .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
+            options: Options(
+      responseDecoder: (responseBytes, options, responseBody) {
+        print(responseBytes);
+        image = Image.memory(responseBytes);
+      },
+    ));
+    return UserModel(username: username, profileImage: image);
+  }
 }

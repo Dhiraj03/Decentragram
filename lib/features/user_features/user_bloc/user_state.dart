@@ -10,10 +10,10 @@ abstract class UserState extends Equatable {
 class UserInitial extends UserState {}
 
 class UserFound extends UserState {
-  final String userAddress;
-  UserFound({@required this.userAddress});
+  final UserModel user;
+  UserFound({@required this.user});
   @override
-  List<Object> get props => [userAddress];
+  List<Object> get props => [user];
 }
 
 class Failure extends UserState {
