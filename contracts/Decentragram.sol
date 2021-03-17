@@ -7,13 +7,12 @@ contract Decentragram {
         int256 chatCount;
         string username;
         string dpIpfsHash;
-        mapping (int256 => Post) posts;
+        Post[] posts;
         mapping (address => Message[]) chats;
-    address[] friends;
+       address[] friends;
     }
     
     struct Post {
-        int256 id;
         int256 likeCount;
         int256 commentCount;
         string ipfsHash;
@@ -58,16 +57,18 @@ contract Decentragram {
         users[userAddress].dpIpfsHash = dpIpfsHash;
     }
     
+    //Connects two profiles as friends
     function followProfile(address userAddress, address followAddress) public checkUserExists(userAddress) checkUserExists(followAddress)  {
-   
     users[userAddress].friends.push(followAddress);
     users[followAddress].friends.push(userAddress);
     }
     
+    //Retrieves list of friends of a user
     function getFriends(address userAddress) public checkUserExists(userAddress) view returns (address[] memory friends) {
         return users[userAddress].friends;
     }
     
+    //Retrieves user details
     function getUserProfile(address userAddress) public checkUserExists(userAddress) view 
     returns (
         int256 id,
@@ -78,15 +79,29 @@ contract Decentragram {
         return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash);
     }
     
-    function getPostCount(address userAddress) public checkUserExists(userAddress) view
-    returns (int256 postCount)
-    {
-        return users[userAddress].postCount;
+    //Post Image
+    function postImage(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
+        
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, likeCount:0, commentCount:0,time: time});
+        users[userAddress].posts.push(post);
     }
     
-    function getUserPost(address userAddress, int256 id) public checkUserExists(userAddress)  view
+    //Upload text-based posts
+    function postText(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, likeCount:0, commentCount:0,time: time});
+        users[userAddress].posts.push(post);
+    }
+    
+    //Get number of posts
+    function getPostCount(address userAddress) public checkUserExists(userAddress) view
+    returns (uint256 postCount)
+    {
+        return users[userAddress].posts.length;
+    }
+    
+    //Retrieves details of post
+    function getUserPost(address userAddress, uint256 id) public checkUserExists(userAddress)  view
     returns (
-        int256 userId,
         int256 likeCount,
         int256 commentCount,
         string memory ipfsHash,
@@ -95,7 +110,7 @@ contract Decentragram {
         )
     {
         return (
-            users[userAddress].posts[id].id,
+            
             users[userAddress].posts[id].likeCount,
             users[userAddress].posts[id].commentCount,
             users[userAddress].posts[id].ipfsHash,
@@ -103,7 +118,7 @@ contract Decentragram {
             users[userAddress].posts[id].time);
     }
     
-    function getPostComment(address userAddress, int256 postID, int256 commentID) public view
+    function getPostComment(address userAddress, uint256 postID, int256 commentID) public view
     returns (
         string memory comment,
         string memory username
