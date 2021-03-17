@@ -1,24 +1,24 @@
 pragma solidity ^0.5.0;
 contract Decentragram {
     struct User {
-        uint256 id;
-        uint256 friendCount;
-        uint256 postCount;
-        uint256 chatCount;
+        int256 id;
+        int256 friendCount;
+        int256 postCount;
+        int256 chatCount;
         string username;
         string dpIpfsHash;
-        mapping (uint256 => Post) posts;
+        mapping (int256 => Post) posts;
         mapping (address => Message[]) chats;
-        mapping (address => bool) friends;
+    address[] friends;
     }
     
     struct Post {
-        uint256 id;
-        uint256 likeCount;
-        uint256 commentCount;
+        int256 id;
+        int256 likeCount;
+        int256 commentCount;
         string ipfsHash;
         string caption;
-        mapping (uint256 => Comment) comments;
+        mapping (int256 => Comment) comments;
         mapping (address => bool) likes;
         string time;
     }
@@ -35,19 +35,22 @@ contract Decentragram {
     }
     
     mapping(address => User) private users;
-    uint256 public userCount = 0;
+    int256 public userCount = 0;
+    //Allows execution if user does not exist
     modifier checkUserDoesntExists(address userAddress)
     {
         require(users[userAddress].id == 0, "This user already exists.");
         _;
     }
     
+    //Allows execution if user exists
     modifier checkUserExists(address userAddress)
     {
         require(users[userAddress].id != 0, "This user doesn't exist.");
         _;
     }
     
+    //Creates a new user profile - username, address and IPFS hash of the profile picture are taken as arguments
     function createProfile(address userAddress, string memory username, string memory dpIpfsHash) public checkUserDoesntExists(userAddress){
         userCount++;
         users[userAddress].id = userCount;
@@ -55,9 +58,19 @@ contract Decentragram {
         users[userAddress].dpIpfsHash = dpIpfsHash;
     }
     
+    function followProfile(address userAddress, address followAddress) public checkUserExists(userAddress) checkUserExists(followAddress)  {
+   
+    users[userAddress].friends.push(followAddress);
+    users[followAddress].friends.push(userAddress);
+    }
+    
+    function getFriends(address userAddress) public checkUserExists(userAddress) view returns (address[] memory friends) {
+        return users[userAddress].friends;
+    }
+    
     function getUserProfile(address userAddress) public checkUserExists(userAddress) view 
     returns (
-        uint256 id,
+        int256 id,
         string memory username,
         string memory dpIpfsHash
         )
@@ -66,16 +79,16 @@ contract Decentragram {
     }
     
     function getPostCount(address userAddress) public checkUserExists(userAddress) view
-    returns (uint256 postCount)
+    returns (int256 postCount)
     {
         return users[userAddress].postCount;
     }
     
-    function getUserPost(address userAddress, uint256 id) public checkUserExists(userAddress)  view
+    function getUserPost(address userAddress, int256 id) public checkUserExists(userAddress)  view
     returns (
-        uint256 userId,
-        uint256 likeCount,
-        uint256 commentCount,
+        int256 userId,
+        int256 likeCount,
+        int256 commentCount,
         string memory ipfsHash,
         string memory caption,
         string memory time
@@ -90,7 +103,7 @@ contract Decentragram {
             users[userAddress].posts[id].time);
     }
     
-    function getPostComment(address userAddress, uint256 postID, uint256 commentID) public view
+    function getPostComment(address userAddress, int256 postID, int256 commentID) public view
     returns (
         string memory comment,
         string memory username
