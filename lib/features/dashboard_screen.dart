@@ -31,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           height: 50,
           child: TabBar(
               labelColor: primaryColor,
-              indicatorColor: Theme.of(context).primaryColor,
+              indicatorColor: primaryColor,
               unselectedLabelColor: grey,
               controller: tabController,
               onTap: (tabIndex) {

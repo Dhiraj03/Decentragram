@@ -20,6 +20,8 @@ class _UserFeedState extends State<UserFeed> {
       create: (_) => bloc,
       child: Scaffold(
         appBar: AppBar(
+        title: Text("Feed"),
+        centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(

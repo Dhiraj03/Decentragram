@@ -13,7 +13,7 @@ import 'features/auth/presentation/bloc/auth_bloc/auth_states.dart';
 import 'features/auth/presentation/screens/Login_Screen.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(HomePage());
@@ -46,34 +46,47 @@ class _HomePageState extends State<HomePage> {
         onGenerateRoute: Router.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         theme: ThemeData.from(
-            textTheme:
-                GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
+            textTheme: GoogleFonts.montserratTextTheme(TextTheme(
+              bodyText1: TextStyle(color: Colors.white),
+              bodyText2: TextStyle(color: Colors.white),
+              caption: TextStyle(color: Colors.white),
+              headline1: TextStyle(color: Colors.white),
+              headline2: TextStyle(color: Colors.white),
+              headline3: TextStyle(color: Colors.white),
+              headline4: TextStyle(color: Colors.white),
+              headline5: TextStyle(color: Colors.white),
+              headline6: TextStyle(color: Colors.white),
+              overline: TextStyle(color: Colors.white),
+              subtitle1: TextStyle(color: Colors.white),
+              subtitle2: TextStyle(color: Colors.white),
+              button: TextStyle(color: Colors.white),
+            )),
             colorScheme: ColorScheme(
-                primary: Color(0xFF7c3395),
-                primaryVariant: Color(0xFFae61c6),
-                secondary: Color(0xFFffa468),
-                secondaryVariant: Color(0xFF373737),
-                surface: bgColor,
-                background: bgColor,
-                error: Color(0xffad1457),
-                onPrimary: Colors.black54,
-                onSecondary: Colors.black87,
-                onSurface: Colors.black54,
-                onBackground: Colors.black87,
-                onError: Colors.black87,
-                brightness: Brightness.light
-                )),
+              primary: Color(0xFFBB86FC),
+              primaryVariant: Color(0xFF3700B3),
+              secondary: Color(0xFFefb7ff),
+              secondaryVariant: Color(0xFF03DAC6),
+              surface: Color(0xFF121212),
+              background: Color(0xFF121212),
+              error: Color(0xFFCF6679),
+              onPrimary: Color(0xFF000000),
+              onSecondary: Color(0xFF000000),
+              onSurface: Color(0xFFFFFFFF),
+              onBackground: Color(0xFFFFFFFF),
+              onError: Color(0xFF000000),
+              brightness: Brightness.light,
+            )),
         home: BlocBuilder<AuthBloc, AuthState>(
             bloc: _authBloc,
             builder: (BuildContext context, AuthState state) {
               if (state is AppStarted) return SplashScreen();
               if (state is Authenticated)
-                return HomeScreen(   
+                return HomeScreen(
                   userRepository: _userRepository,
                 );
               if (state is Unauthenticated)
                 return LoginScreen(userRepository: _userRepository);
-              return Container(); 
+              return Container();
             }),
       ),
     );

@@ -26,7 +26,11 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
             builder: (BuildContext context, UserState state) {
               return Column(children: [
                 TextFormField(
+                  style: TextStyle(
+                    
+                  ),
                   decoration: InputDecoration(
+                    
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           gapPadding: 0),
