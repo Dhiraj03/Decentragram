@@ -13,7 +13,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0x8f487b643bdbc147b54f3af024c08d4ab5b95b1a";
+      "0xcbbe5242950ffb0dd787950c5c4f540833aaca62";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
@@ -71,4 +71,8 @@ class RemoteDataSource {
     return UserModel(
         username: username, profileImage: image, userAddress: address);
   }
+
+  // Future<UserModel> getUserProfile(String address) async {
+  //   var response = await dioClient.get(url + )
+  // }
 }

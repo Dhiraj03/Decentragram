@@ -30,5 +30,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         yield UserFound(user: user);
       }
     }
+    else if(event is GetMyProfile)
+    {
+      
+    }
   }
 }

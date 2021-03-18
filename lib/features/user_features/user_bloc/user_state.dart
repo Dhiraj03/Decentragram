@@ -16,6 +16,13 @@ class UserFound extends UserState {
   List<Object> get props => [user];
 }
 
+class UserProfile extends UserState {
+  final UserModel profile;
+  UserProfile({@required this.profile});
+  @override
+  List<Object> get props => [profile];
+}
+
 class Failure extends UserState {
   final String errorMessage;
   Failure({@required this.errorMessage});

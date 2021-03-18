@@ -2,23 +2,24 @@ pragma solidity ^0.5.0;
 contract Decentragram {
     struct User {
         int256 id;
-        int256 friendCount;
-        int256 postCount;
-        int256 chatCount;
         string username;
         string dpIpfsHash;
+        
+        address[] friends;
+
         Post[] posts;
+        
+        address[] interactions;
         mapping (address => Message[]) chats;
-       address[] friends;
+        
     }
     
     struct Post {
-        int256 likeCount;
         int256 commentCount;
         string ipfsHash;
         string caption;
         mapping (int256 => Comment) comments;
-        mapping (address => bool) likes;
+        address[] likes;
         string time;
     }
     
@@ -73,22 +74,27 @@ contract Decentragram {
     returns (
         int256 id,
         string memory username,
-        string memory dpIpfsHash
+        string memory dpIpfsHash,
+        uint256 friendCount,
+        uint256 postCount,
+        uint256 chatCount
         )
     {
-        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash);
+        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash, users[userAddress].friends.length, users[userAddress].posts.length, users[userAddress].interactions.length);
     }
+    
     
     //Post Image
     function postImage(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
-        
-        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, likeCount:0, commentCount:0,time: time});
+        address[] memory likes;
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
         users[userAddress].posts.push(post);
     }
     
     //Upload text-based posts
     function postText(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
-        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, likeCount:0, commentCount:0,time: time});
+        address[] memory likes;
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
         users[userAddress].posts.push(post);
     }
     
@@ -102,7 +108,7 @@ contract Decentragram {
     //Retrieves details of post
     function getUserPost(address userAddress, uint256 id) public checkUserExists(userAddress)  view
     returns (
-        int256 likeCount,
+        uint256 likeCount,
         int256 commentCount,
         string memory ipfsHash,
         string memory caption,
@@ -111,7 +117,7 @@ contract Decentragram {
     {
         return (
             
-            users[userAddress].posts[id].likeCount,
+            users[userAddress].posts[id].likes.length,
             users[userAddress].posts[id].commentCount,
             users[userAddress].posts[id].ipfsHash,
             users[userAddress].posts[id].caption,
@@ -129,7 +135,5 @@ contract Decentragram {
                 users[users[userAddress].posts[postID].comments[commentID].userAddress].username
                 );
         }
-        
-
     
 }
