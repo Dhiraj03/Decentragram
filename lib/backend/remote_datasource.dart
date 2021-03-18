@@ -10,8 +10,10 @@ import 'package:path_provider/path_provider.dart';
 
 class RemoteDataSource {
   var dioClient = Dio();
-  String url =
-      'https://mainnet-api.maticvigil.com/v1.0/contract/0x744b5793d54795c55c65ffcfa4feec6d17208d89';
+  static const String maticURL =
+      'https://mainnet-api.maticvigil.com/v1.0/contract/';
+  static const  String contractAddress = "0x8f487b643bdbc147b54f3af024c08d4ab5b95b1a";
+  String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
   FirestoreRepository repo = FirestoreRepository();
@@ -64,6 +66,7 @@ class RemoteDataSource {
         image = responseBytes;
       },
     ));
-    return UserModel(username: username, profileImage: image, userAddress: address);
+    return UserModel(
+        username: username, profileImage: image, userAddress: address);
   }
 }
