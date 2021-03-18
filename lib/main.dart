@@ -74,7 +74,8 @@ class _HomePageState extends State<HomePage> {
               onSurface: Color(0xFFFFFFFF),
               onBackground: Color(0xFFFFFFFF),
               onError: Color(0xFF000000),
-              brightness: Brightness.light,
+              brightness: Brightness.dark,
+
             )),
         home: BlocBuilder<AuthBloc, AuthState>(
             bloc: _authBloc,

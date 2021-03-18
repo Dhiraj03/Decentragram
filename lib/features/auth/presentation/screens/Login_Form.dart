@@ -104,7 +104,7 @@ class _LoginFormState extends State<LoginForm> {
                     child: Image.asset("assets/app_icon.png", fit: BoxFit.contain)),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( 
                         icon: Icon(Icons.email), labelText: 'Email'),
                     autovalidate: true,
                     autocorrect: false,
