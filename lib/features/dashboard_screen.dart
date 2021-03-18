@@ -1,5 +1,6 @@
 import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
+import 'package:decentragram/features/user_features/my_profile_screen.dart';
 import 'package:decentragram/features/user_features/search_user_screen.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
 import 'package:decentragram/features/user_features/user_feed_screen.dart';
@@ -20,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     pageController = PageController(initialPage: 0);
-    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     super.initState();
   }
 
@@ -43,17 +44,19 @@ class _DashboardScreenState extends State<DashboardScreen>
                     icon: Icon(MaterialCommunityIcons.home)),
                 Tab(
                     iconMargin: iconMargin,
-                    icon: Icon(MaterialCommunityIcons.account_search))
+                    icon: Icon(MaterialCommunityIcons.account_search)),
+                Tab(
+                iconMargin: iconMargin,
+                icon: Icon(FlutterIcons.account_box_mco)),
               ]),
         ),
         body: PageView(
-          allowImplicitScrolling: true,
           onPageChanged: (pageIndex) {
             tabController.index = pageIndex;
           },
-          pageSnapping: false,
+          pageSnapping: true,
           controller: pageController,
-          children: [UserFeed(), SearchUserScreen()],
+          children: [UserFeed(), SearchUserScreen(), MyProfileScreen()],
         ));
   }
 }

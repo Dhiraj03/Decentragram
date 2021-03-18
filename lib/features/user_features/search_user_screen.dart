@@ -1,5 +1,7 @@
 import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
+import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_events.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,17 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
       create: (_) => bloc,
       child: Container(
         child: Scaffold(
+            appBar: AppBar(
+            title: Text("Search for a user"),
+            centerTitle: true,
+            elevation: 0,
+            actions: [
+              IconButton(
+              icon: Icon(FlutterIcons.log_out_fea),
+              onPressed: () =>
+                  BlocProvider.of<AuthBloc>(context)..add(LoggedOut()))
+            ],
+            ),
             body: Padding(
           padding: searchBarPadding,
           child: BlocConsumer<UserBloc, UserState>(
