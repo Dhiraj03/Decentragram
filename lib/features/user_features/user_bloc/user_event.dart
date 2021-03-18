@@ -15,8 +15,7 @@ class SearchUser extends UserEvent {
 }
 
 class GetMyProfile extends UserEvent {
-  final String userAddress;
-  GetMyProfile({@required this.userAddress});
+  GetMyProfile();
   @override
-  List<Object> get props => [userAddress];
+  List<Object> get props => [];
 }

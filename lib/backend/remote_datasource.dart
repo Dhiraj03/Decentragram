@@ -57,7 +57,6 @@ class RemoteDataSource {
   Future<UserModel> getUser(String address) async {
     var response = await dioClient.get(url + "/getUserProfile/$address");
     var ipfsHash = response.data["data"][0]["dpIpfsHash"];
-    print(ipfsHash);
     var image;
     var username = response.data["data"][0]["username"];
     var ipfsResponse = await dioClient
@@ -72,7 +71,18 @@ class RemoteDataSource {
         username: username, profileImage: image, userAddress: address);
   }
 
-  // Future<UserModel> getUserProfile(String address) async {
-  //   var response = await dioClient.get(url + )
-  // }
+  Future<UserModel> getUserProfile(String address) async {
+    var response = await dioClient.get(url + "/getUserProfile/$address");
+    var ipfsHash = response.data["data"][0]["dpIpfsHash"];
+    var image;
+    var ipfsResponse = await dioClient
+        .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
+            options: Options(
+      responseDecoder: (responseBytes, options, responseBody) {
+        print(responseBytes);
+        image = responseBytes;
+      },
+    ));
+    return UserModel.myProfile(response.data["data"][0], address, image);
+  }
 }

@@ -19,8 +19,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UserEvent event,
   ) async* {
     if (event is SearchUser) {
-      print('searching');
-      print(event.username);
       yield Loading();
       String result = await repo.searchUser(event.username);
       if (result == null) {
@@ -29,10 +27,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         UserModel user = await backend.getUser(result);
         yield UserFound(user: user);
       }
-    }
-    else if(event is GetMyProfile)
-    {
-      
+    } else if (event is GetMyProfile) {
+      yield Loading();
+      UserModel userDetails = await repo.getUser();
+      String userAddress = userDetails.userAddress;
+      UserModel user = await backend.getUserProfile(userAddress);
+      yield UserProfile(profile: user);
     }
   }
 }
