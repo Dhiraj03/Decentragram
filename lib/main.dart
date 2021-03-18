@@ -1,5 +1,7 @@
+import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/features/auth/data/user_repository.dart';
 import 'package:decentragram/home_screen.dart';
+import 'package:decentragram/routes/router.gr.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,24 +41,28 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (BuildContext context) => _authBloc,
       child: MaterialApp(
+        initialRoute: Router.homePage,
+        navigatorKey: Router.navigator.key,
+        onGenerateRoute: Router.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         theme: ThemeData.from(
             textTheme:
                 GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
             colorScheme: ColorScheme(
-                primary: Color(0xFFf4511e),
-                primaryVariant: Color(0xffb91400),
-                secondary: Color(0xFF616161),
+                primary: Color(0xFF7c3395),
+                primaryVariant: Color(0xFFae61c6),
+                secondary: Color(0xFFffa468),
                 secondaryVariant: Color(0xFF373737),
-                surface: Color(0xFFF2F2F2),
-                background: Color(0xFFF2F2F2),
+                surface: bgColor,
+                background: bgColor,
                 error: Color(0xffad1457),
                 onPrimary: Colors.black54,
                 onSecondary: Colors.black87,
                 onSurface: Colors.black54,
                 onBackground: Colors.black87,
                 onError: Colors.black87,
-                brightness: Brightness.light)),
+                brightness: Brightness.light
+                )),
         home: BlocBuilder<AuthBloc, AuthState>(
             bloc: _authBloc,
             builder: (BuildContext context, AuthState state) {

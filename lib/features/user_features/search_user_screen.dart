@@ -20,10 +20,6 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
       create: (_) => bloc,
       child: Container(
         child: Scaffold(
-            // appBar: AppBar(
-            //   title: Text("Search for a user"),
-            //   centerTitle: true,
-            // ),
             body: Padding(
           padding: searchBarPadding,
           child: BlocConsumer<UserBloc, UserState>(
@@ -89,7 +85,6 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                   Padding(
                       padding: EdgeInsets.only(top: 60),
                       child: CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(grey),
                       ))
               ]);
             },

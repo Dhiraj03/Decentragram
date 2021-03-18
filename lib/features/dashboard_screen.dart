@@ -3,6 +3,7 @@ import 'package:decentragram/core/dimens.dart';
 import 'package:decentragram/features/user_features/search_user_screen.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
 import 'package:decentragram/features/user_features/user_feed_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -29,18 +30,19 @@ class _DashboardScreenState extends State<DashboardScreen>
         bottomNavigationBar: Container(
           height: 50,
           child: TabBar(
-            labelColor: primaryColor,
-            indicatorColor: Theme.of(context).primaryColor,
-            unselectedLabelColor: Color(0xCC8e8e8e),
-            controller: tabController,
+              labelColor: primaryColor,
+              indicatorColor: Theme.of(context).primaryColor,
+              unselectedLabelColor: grey,
+              controller: tabController,
               onTap: (tabIndex) {
                 pageController.jumpToPage(tabIndex);
               },
               tabs: [
                 Tab(
-                  iconMargin: iconMargin, icon: Icon(MaterialCommunityIcons.home)),
+                    iconMargin: iconMargin,
+                    icon: Icon(MaterialCommunityIcons.home)),
                 Tab(
-                  iconMargin: iconMargin,
+                    iconMargin: iconMargin,
                     icon: Icon(MaterialCommunityIcons.account_search))
               ]),
         ),
@@ -49,6 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           onPageChanged: (pageIndex) {
             tabController.index = pageIndex;
           },
+          pageSnapping: false,
           controller: pageController,
           children: [UserFeed(), SearchUserScreen()],
         ));
