@@ -34,3 +34,8 @@ class Loading extends UserState {
   @override
   List<Object> get props => [];
 }
+
+class AskPostType extends UserState {
+  @override
+  List<Object> get props => [];
+}

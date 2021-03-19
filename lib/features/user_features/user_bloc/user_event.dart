@@ -19,3 +19,16 @@ class GetMyProfile extends UserEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetPostType extends UserEvent {
+  GetPostType();
+  @override
+  List<Object> get props => [];
+}
+
+class PostType extends UserEvent {
+  final String type;
+  PostType({@required this.type});
+  @override
+  List<Object> get props => [type];
+}
