@@ -44,7 +44,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         backgroundImage:
                             MemoryImage(state.profile.profileImage)),
                     SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
                     Text("Username", style:TextStyle(
                       fontSize: 16,
@@ -55,12 +55,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       style: TextStyle(fontSize: 27),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     Text("User Address", style:TextStyle(
                       fontSize: 16,
                       color: grey
                     )),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(state.profile.userAddress, style: TextStyle(fontSize: 20,), overflow: TextOverflow.ellipsis,),
                   ],
                 ),

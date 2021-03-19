@@ -1,5 +1,6 @@
 import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/core/dimens.dart';
+import 'package:decentragram/features/user_features/add_post_screen.dart';
 import 'package:decentragram/features/user_features/my_profile_screen.dart';
 import 'package:decentragram/features/user_features/search_user_screen.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
@@ -17,11 +18,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     with SingleTickerProviderStateMixin {
   PageController pageController;
   TabController tabController;
-  // UserBloc userBloc;
   @override
   void initState() {
     pageController = PageController(initialPage: 0);
-    tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    tabController = TabController(length: 4, vsync: this, initialIndex: 0);
     super.initState();
   }
 
@@ -48,6 +48,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Tab(
                 iconMargin: iconMargin,
                 icon: Icon(FlutterIcons.account_box_mco)),
+                Tab(
+                iconMargin: iconMargin,
+                icon: Icon(MaterialCommunityIcons.plus_box_outline,)),
               ]),
         ),
         body: PageView(
@@ -56,7 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           },
           pageSnapping: true,
           controller: pageController,
-          children: [UserFeed(), SearchUserScreen(), MyProfileScreen()],
+          children: [UserFeed(), SearchUserScreen(), MyProfileScreen(), AddPostScreen()],
         ));
   }
 }

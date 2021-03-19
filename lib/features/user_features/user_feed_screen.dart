@@ -2,6 +2,7 @@ import 'package:decentragram/core/colors.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_events.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
+import 'package:decentragram/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -20,6 +21,14 @@ class _UserFeedState extends State<UserFeed> {
       create: (_) => bloc,
       child: Scaffold(
         appBar: AppBar(
+        leading: IconButton(
+        icon: Icon(
+          MaterialCommunityIcons.plus_box_outline,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Router.navigator.pushNamed(Router.addPostScreen);
+        }),
         title: Text("Feed"),
         centerTitle: true,
         elevation: 0,
