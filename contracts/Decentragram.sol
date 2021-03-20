@@ -1,4 +1,4 @@
-pragma solidity ^0.5.17;
+pragma solidity ^0.5.0;
 contract Decentragram {
     struct User {
         int256 id;
@@ -20,6 +20,7 @@ contract Decentragram {
         string ipfsHash;
         string caption;
         mapping (int256 => Comment) comments;
+        bool isImage;
         address[] likes;
         string time;
     }
@@ -54,6 +55,7 @@ contract Decentragram {
     modifier checkNotSame(address userAddress, address followAddress) 
     {
         require(userAddress != followAddress, "They are the same users!");
+        _;
     }
     
     //Creates a new user profile - username, address and IPFS hash of the profile picture are taken as arguments
@@ -94,7 +96,7 @@ contract Decentragram {
     {
         for(uint256 i=0;i<users[userAddress].friends.length;i++)
          {
-             if(users[userAddress] == followAddress)
+             if(users[userAddress].friends[i] == followAddress)
                 return true;
          }
          return false;
@@ -104,7 +106,7 @@ contract Decentragram {
     function postImage(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
         users[userAddress].postLength++;
         address[] memory likes;
-        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes, isImage: true});
         users[userAddress].posts.push(post);
     }
     
@@ -112,7 +114,7 @@ contract Decentragram {
     function postText(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
         users[userAddress].postLength++;
         address[] memory likes;
-        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
+        Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes, isImage: false});
         users[userAddress].posts.push(post);
     }
     
@@ -130,7 +132,8 @@ contract Decentragram {
         int256 commentCount,
         string memory ipfsHash,
         string memory caption,
-        string memory time
+        string memory time,
+        bool isImage
         )
     {
         return (
@@ -139,7 +142,9 @@ contract Decentragram {
             users[userAddress].posts[id].commentCount,
             users[userAddress].posts[id].ipfsHash,
             users[userAddress].posts[id].caption,
-            users[userAddress].posts[id].time);
+            users[userAddress].posts[id].time,
+            users[userAddress].posts[id].isImage
+            );
     }
     
     function getPostComment(address userAddress, uint256 postID, int256 commentID) public view
