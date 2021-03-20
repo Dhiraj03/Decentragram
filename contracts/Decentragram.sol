@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.17;
 contract Decentragram {
     struct User {
         int256 id;
@@ -51,6 +51,11 @@ contract Decentragram {
         _;
     }
     
+    modifier checkNotSame(address userAddress, address followAddress) 
+    {
+        require(userAddress != followAddress, "They are the same users!");
+    }
+    
     //Creates a new user profile - username, address and IPFS hash of the profile picture are taken as arguments
     function createProfile(address userAddress, string memory username, string memory dpIpfsHash) public checkUserDoesntExists(userAddress){
         userCount++;
@@ -60,7 +65,7 @@ contract Decentragram {
     }
     
     //Connects two profiles as friends
-    function followProfile(address userAddress, address followAddress) public checkUserExists(userAddress) checkUserExists(followAddress)  {
+    function followProfile(address userAddress, address followAddress) public checkUserExists(userAddress) checkUserExists(followAddress) checkNotSame(userAddress, followAddress) {
     users[userAddress].friends.push(followAddress);
     users[followAddress].friends.push(userAddress);
     }
@@ -81,9 +86,19 @@ contract Decentragram {
         uint256 chatCount
         )
     {
-        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash, users[userAddress].friends.length, users[userAddress].postLength, users[userAddress].interactions.length);
+        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash, users[userAddress].friends.length, users[userAddress].posts.length, users[userAddress].interactions.length);
     }
     
+    //Checks if two users follow each other
+    function doesFollow(address userAddress, address followAddress) public view checkUserExists(userAddress) checkUserDoesntExists(followAddress) returns (bool follows)
+    {
+        for(uint256 i=0;i<users[userAddress].friends.length;i++)
+         {
+             if(users[userAddress] == followAddress)
+                return true;
+         }
+         return false;
+    }
     
     //Post Image
     function postImage(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
