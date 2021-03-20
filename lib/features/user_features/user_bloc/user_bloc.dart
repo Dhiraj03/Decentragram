@@ -51,6 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       String time = DateTime.now().toIso8601String();
       UserModel userDetails = await repo.getUser();
       String userAddress = userDetails.userAddress;
+      yield Loading();
       var response = await backend.publishImagePost(
           time, image, event.caption, userAddress);
       print(response.toString());
@@ -59,7 +60,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         yield ImagePostType(image: image);
       }, (success) async* {
         yield Success(txHash: success);
-        yield RedirectToDashboard();
       });
     }
   }
