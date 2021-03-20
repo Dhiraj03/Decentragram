@@ -77,12 +77,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                      height: 40,
-                      child: Text(
-                        'Or',
-                        style: TextStyle(fontSize: 35),
-                      )),
+                 Divider(
+                   color: primaryColor.withOpacity(0.5),
+                 ),
                   Expanded(
                       flex: 1,
                       child: InkWell(
