@@ -52,3 +52,17 @@ class PublishTextPost extends UserEvent {
   @override
   List<Object> get props => [caption, text];
 }
+
+class GetSearchUserProfile extends UserEvent {
+  final String userAddress;
+  GetSearchUserProfile({@required this.userAddress});
+  @override
+  List<Object> get props => [userAddress];
+}
+
+class FollowProfile extends UserEvent{
+  final String userAddress;
+  FollowProfile({@required this.userAddress});
+  @override
+  List<Object> get props => [userAddress];
+}

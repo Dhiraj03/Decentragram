@@ -41,8 +41,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is GetPostType) {
       yield AskPostType();
     } else if (event is PostType) {
-      if (event.type == "Image") yield ImagePostType(image: image);
-     else if  (event.type == "Text") yield TextPostType();
+      if (event.type == "Image")
+        yield ImagePostType(image: image);
+      else if (event.type == "Text") yield TextPostType();
     } else if (event is PickImagePost) {
       image = await pickImage();
       yield ImagePostType(image: image);
@@ -60,9 +61,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }, (success) async* {
         yield Success(txHash: success);
       });
-    }
-    else if(event is PublishTextPost)
-    {
+    } else if (event is PublishTextPost) {
       String time = DateTime.now().toIso8601String();
       UserModel userDetails = await repo.getUser();
       String userAddress = userDetails.userAddress;
@@ -76,6 +75,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }, (success) async* {
         yield Success(txHash: success);
       });
+    } else if (event is GetSearchUserProfile) {
+      bool self;
+      String address = (await repo.getUser()).userAddress;
+      self = (address == event.userAddress);
+      print(address + "   " + event.userAddress);
+      bool follow = await backend.doesFollowProfile(address, event.userAddress);
+      yield Loading();
+      print(follow);
+      print(self);
+      yield SearchUserProfile(following: follow, self: self);
+    } else if (event is FollowProfile) {
+      String address = (await repo.getUser()).userAddress;
+      var response = await backend.followProfile(address, event.userAddress);
+      yield Loading();
+      yield Success(txHash: "You're following ${event.userAddress} now!");
     }
   }
 

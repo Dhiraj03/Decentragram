@@ -63,3 +63,13 @@ class RedirectToDashboard extends UserState {
   @override
   List<Object> get props => [];
 }
+
+class SearchUserProfile extends UserState {
+  final bool self;
+  final bool following;
+  SearchUserProfile({@required this.following, @required this.self});
+  @override
+  List<Object> get props => [];
+}
+
+

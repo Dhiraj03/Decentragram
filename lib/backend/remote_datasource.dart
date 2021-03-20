@@ -14,7 +14,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0xa8d7699f11b3e7d4b6e0e1d740809802ac118501";
+      "0x9b3e30cc7e1fbfd41640c5a5bb4ab8efe42f7a4e";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
@@ -90,10 +90,12 @@ class RemoteDataSource {
     }
   }
 
-  Future<Either<ErrorMessage, String>> publishTextPost(String time, String text, String caption, String userAddress) async {
+  Future<Either<ErrorMessage, String>> publishTextPost(
+      String time, String text, String caption, String userAddress) async {
     File file = await localDataSource.storeFile(text);
     final Map<String, dynamic> map = {
-      'file' : await MultipartFile.fromBytes(File(file.path).readAsBytesSync(), filename: file.path.split("/").last)
+      'file': await MultipartFile.fromBytes(File(file.path).readAsBytesSync(),
+          filename: file.path.split("/").last)
     };
     var ipfsHash;
     var ipfsResponse =
@@ -121,6 +123,31 @@ class RemoteDataSource {
       print('lmao');
       return Left(ErrorMessage(message: "Error!"));
     }
+  }
+
+  Future<void> followProfile(String userAddress, String followAddress) async {
+    Map<String, dynamic> requestMap = {
+      "userAddress": userAddress,
+      "followAddress": followAddress
+    };
+    try {
+      var response = await dioClient.post(url + "/followProfile",
+          data: requestMap,
+          options: Options(headers: {
+            "X-API-KEY": [apiKey]
+          }, contentType: Headers.formUrlEncodedContentType));
+      return Right(response.data["data"][0]["txHash"]);
+    } catch (e) {
+      return Left(ErrorMessage(message: "Error!"));
+    }
+  }
+
+  Future<bool> doesFollowProfile(
+      String userAddress, String followAddress) async {
+    print('lol');
+    var response =
+        await dioClient.get(url + "/doesFollow/$userAddress/$followAddress");
+    return response.data["data"][0]["follows"];
   }
 
   Future<UserModel> getUser(String address) async {
