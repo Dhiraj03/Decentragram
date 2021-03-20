@@ -93,7 +93,7 @@ class RemoteDataSource {
   Future<Either<ErrorMessage, String>> publishTextPost(String time, String text, String caption, String userAddress) async {
     File file = await localDataSource.storeFile(text);
     final Map<String, dynamic> map = {
-      'file' : await MultipartFile.fromFile(file.path);
+      'file' : await MultipartFile.fromBytes(File(file.path).readAsBytesSync(), filename: file.path.split("/").last)
     };
     var ipfsHash;
     var ipfsResponse =

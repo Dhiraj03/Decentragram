@@ -16,6 +16,7 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   UserBloc bloc = UserBloc();
   TextEditingController captionController = TextEditingController();
+  TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UserBloc>(
@@ -77,9 +78,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 40,
-                    child: Text('Or', style: TextStyle(fontSize: 35),)
-                  ),
+                      height: 40,
+                      child: Text(
+                        'Or',
+                        style: TextStyle(fontSize: 35),
+                      )),
                   Expanded(
                       flex: 1,
                       child: InkWell(
@@ -191,50 +194,81 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
               ),
             );
-          } else if(state is TextPostType)
-          {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                  child: TextFormField(                 
-                      maxLength: 1000,
-                      maxLines: 10,
-                      maxLengthEnforced: true,
-                      style: TextStyle(fontSize: 17, height: 1.35),
-                      controller: captionController,
-                      decoration: InputDecoration(
-                        labelText: "Share your thoughts here",
-                          contentPadding: EdgeInsets.all(13),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: primaryColor.withOpacity(0.1)),
-                              borderRadius: BorderRadius.circular(5)))),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                FloatingActionButton(
-                    backgroundColor: primaryColor,
-                    child: Icon(
-                      Icons.publish,
-                      size: 40,
-                    ),
-                    onPressed: () {
-                      bloc
-                        ..add(PublishImagePost(
-                            caption: captionController.text.isEmpty
-                                ? "null"
-                                : captionController.text));
-                    })
-              ],
+          } else if (state is TextPostType) {
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                    child: TextFormField(
+                        
+                        maxLength: 100,
+                        maxLines: 2,
+                        maxLengthEnforced: true,
+                        style: TextStyle(fontSize: 17, height: 1.35),
+                        controller: captionController,
+                        decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelText: "Describe your post in a line or two",
+                            contentPadding: EdgeInsets.all(13),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: primaryColor.withOpacity(0.1)),
+                                borderRadius: BorderRadius.circular(5)))),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                    child: TextFormField(
+                        validator: (value) {
+                          if (textController.text.isEmpty) {
+                            return "The post cannot be empty";
+                          }
+                          return null;
+                        },
+                        autovalidate: true,
+                        maxLength: 1000,
+                        maxLines: 8,
+                        maxLengthEnforced: true,
+                        style: TextStyle(fontSize: 17, height: 1.35),
+                        controller: textController,
+                        decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelText: "Share your thoughts here",
+                            contentPadding: EdgeInsets.all(13),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: primaryColor.withOpacity(0.1)),
+                                borderRadius: BorderRadius.circular(5)))),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      child: Icon(
+                        Icons.publish,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        if (textController.text.isNotEmpty)
+                          bloc
+                            ..add(PublishTextPost(
+                                text: textController.text,
+                                caption: captionController.text.isEmpty
+                                    ? "null"
+                                    : captionController.text));
+                      })
+                ],
+              ),
             );
-          } 
-          else
+          } else
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -256,7 +290,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           } else if (state is Failure) {
             Scaffold.of(context)
                 .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-          } 
+          }
         }),
       ),
     );
