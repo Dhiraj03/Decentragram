@@ -54,6 +54,40 @@ class RemoteDataSource {
     }
   }
 
+  Future<Either<ErrorMessage, String>> publishImagePost(
+      String time, File image, String caption, String userAddress) async {
+    final Map<String, dynamic> map = {
+      'file': await MultipartFile.fromFile(image.path),
+    };
+    var ipfsHash;
+    var ipfsResponse =
+        await dioClient.post<dynamic>(ipfs, data: FormData.fromMap(map));
+    if (ipfsResponse.statusCode != 200)
+      return Left(ErrorMessage(message: ipfsResponse.data.toString()));
+    else
+      ipfsHash = ipfsResponse.data["Hash"];
+    Map<String, dynamic> requestMap = {
+      "userAddress": userAddress,
+      "ipfsHash": ipfsHash,
+      "caption": caption,
+      "time": time
+    };
+    print(requestMap.toString());
+    try {
+      var response = await dioClient.post(url + "/postImage",
+          data: requestMap,
+          options: Options(headers: {
+            "X-API-KEY": [apiKey]
+          }, contentType: Headers.formUrlEncodedContentType));
+      print(response.toString());
+      return Right(response.data["data"][0]["txHash"]);
+    } catch (e) {
+      print(e.response);
+      print('lmao');
+      return Left(ErrorMessage(message: "Error!"));
+    }
+  }
+
   Future<UserModel> getUser(String address) async {
     var response = await dioClient.get(url + "/getUserProfile/$address");
     var ipfsHash = response.data["data"][0]["dpIpfsHash"];

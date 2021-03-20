@@ -39,3 +39,27 @@ class AskPostType extends UserState {
   @override
   List<Object> get props => [];
 }
+
+class ImagePostType extends UserState {
+  final File image;
+  ImagePostType({this.image});
+  @override
+  List<Object> get props => [image];
+}
+
+class TextPostType extends UserState {
+  @override
+  List<Object> get props => [];
+}
+
+class Success extends UserState {
+  final String txHash;
+  Success({@required this.txHash});
+  @override
+  List<Object> get props => [txHash];
+}
+
+class RedirectToDashboard extends UserState {
+  @override
+  List<Object> get props => [];
+}

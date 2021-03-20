@@ -32,3 +32,15 @@ class PostType extends UserEvent {
   @override
   List<Object> get props => [type];
 }
+
+class PickImagePost extends UserEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class PublishImagePost extends UserEvent {
+  final String caption;
+  PublishImagePost({@required this.caption});
+  @override
+  List<Object> get props => [caption];
+}

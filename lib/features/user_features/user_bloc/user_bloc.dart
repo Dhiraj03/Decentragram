@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:decentragram/backend/remote_datasource.dart';
@@ -6,6 +7,8 @@ import 'package:decentragram/database/firestore_repository.dart';
 import 'package:decentragram/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -14,6 +17,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserState get initialState => UserInitial();
   FirestoreRepository repo = FirestoreRepository();
   RemoteDataSource backend = RemoteDataSource();
+  ImagePicker imagePicker = ImagePicker();
+  File image;
   @override
   Stream<UserState> mapEventToState(
     UserEvent event,
@@ -35,6 +40,32 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield UserProfile(profile: user);
     } else if (event is GetPostType) {
       yield AskPostType();
+    } else if (event is PostType) {
+      if (event.type == "Image") yield ImagePostType(image: image);
+    } else if (event is PostType) {
+      if (event.type == "Text") yield TextPostType();
+    } else if (event is PickImagePost) {
+      image = await pickImage();
+      yield ImagePostType(image: image);
+    } else if (event is PublishImagePost) {
+      String time = DateTime.now().toIso8601String();
+      UserModel userDetails = await repo.getUser();
+      String userAddress = userDetails.userAddress;
+      var response = await backend.publishImagePost(
+          time, image, event.caption, userAddress);
+      print(response.toString());
+      yield* response.fold((failure) async* {
+        yield Failure(errorMessage: failure.message);
+        yield ImagePostType(image: image);
+      }, (success) async* {
+        yield Success(txHash: success);
+        yield RedirectToDashboard();
+      });
     }
+  }
+
+  Future<File> pickImage() async {
+    PickedFile file = await imagePicker.getImage(source: ImageSource.gallery);
+    return File(file.path);
   }
 }
