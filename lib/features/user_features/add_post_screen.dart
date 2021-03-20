@@ -45,43 +45,72 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FlatButton.icon(
-                          splashColor: primaryColor,
-                          padding: EdgeInsets.all(15),
-                          shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: primaryColor
-                          ),
-                          borderRadius: BorderRadius.circular(5)),
-                          onPressed: () {
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          splashColor: primaryColor.withOpacity(0.1),
+                          onTap: () {
                             bloc..add(PostType(type: "Image"));
                           },
-                          icon: Icon(MaterialCommunityIcons.image),
-                          label: Text("Image", style: TextStyle(
-                            fontSize: 30
-                          ),)),
-                        SizedBox(
-                          height: 50,
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                  opacity: 0.1,
+                                  child: Center(
+                                      child: Image(
+                                          image: AssetImage("assets/image.png"),
+                                          width: 340,
+                                          height: 320,
+                                          fit: BoxFit.fitWidth,
+                                          alignment: Alignment.center))),
+                              Center(
+                                  child: Text(
+                                "Image",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ))
+                            ],
+                          ),
                         ),
-                      FlatButton.icon(
-                      splashColor: primaryColor,
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: primaryColor
                       ),
-                      borderRadius: BorderRadius.circular(5)),
-                      onPressed: () {
-                        bloc..add(PostType(type: "Text"));
-                      },
-                      icon: Icon(MaterialCommunityIcons.text),
-                      label: Text("Text", style: TextStyle(
-                        fontSize: 30
-                      ),)),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            splashColor: primaryColor.withOpacity(0.1),
+                            onTap: () {
+                              bloc..add(PostType(type: "Image"));
+                            },
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                    opacity: 0.1,
+                                    child: Center(
+                                        child: Image(
+                                      image: AssetImage("assets/text.png"),
+                                      width: 340,
+                                      height: 320,
+                                      fit: BoxFit.fitWidth,
+                                      alignment: Alignment.center,
+                                    ))),
+                                Center(
+                                    child: Text(
+                                  "Text",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                ))
+                              ],
+                            ),
+                          )),
                     ],
                   ),
                 );
-              }
+              } else
+                return CircularProgressIndicator();
             },
             listener: (BuildContext context, UserState state) {}),
       ),
