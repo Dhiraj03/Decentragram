@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -15,7 +16,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0x5589da0efecfcf88f3ca1d261dfdf28b3bfad5c9";
+      "0xc01a7987c2ca8aa85fa5be17b4be89544d9745b4";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
@@ -98,9 +99,12 @@ class RemoteDataSource {
       'file': await MultipartFile.fromBytes(File(file.path).readAsBytesSync(),
           filename: file.path.split("/").last)
     };
+    print(file.readAsStringSync().toString());
     var ipfsHash;
-    var ipfsResponse =
-        await dioClient.post<dynamic>(ipfs, data: FormData.fromMap(map));
+    var ipfsResponse = await dioClient.post<dynamic>(
+      ipfs,
+      data: FormData.fromMap(map),
+    );
     if (ipfsResponse.statusCode != 200)
       return Left(ErrorMessage(message: ipfsResponse.data.toString()));
     else
@@ -188,26 +192,30 @@ class RemoteDataSource {
     var ipfsHash = response.data["data"][0]["ipfsHash"];
     if (response.data["data"][0]["isImage"]) {
       var image;
-      await dioClient
+      var ipfsResponse = await dioClient
           .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
               options: Options(
         responseDecoder: (responseBytes, options, responseBody) {
-          print(responseBytes);
           image = responseBytes;
         },
       ));
+
       return PostModel.imagePost(response.data["data"][0], image);
     } else {
+      print(ipfsHash);
       var image;
-      await dioClient
-          .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
-              options: Options(
-        responseDecoder: (responseBytes, options, responseBody) {
-          print(responseBytes);
-          image = responseBytes;
-        },
-      ));
-      return PostModel.textPost(response.data["data"][0], image);
+      var ipfsResponse = await dioClient.post(
+          'https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
+          options: Options(
+            responseType: ResponseType.bytes,
+            responseDecoder: (responseBytes, options, responseBody) {
+              print(responseBytes);
+              image = responseBytes;
+            },
+          ));
+
+      return PostModel.textPost(
+          response.data["data"][0], utf8.decode(ipfsResponse.data));
     }
   }
 

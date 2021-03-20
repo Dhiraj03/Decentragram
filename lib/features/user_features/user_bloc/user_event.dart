@@ -60,9 +60,14 @@ class GetSearchUserProfile extends UserEvent {
   List<Object> get props => [userAddress];
 }
 
-class FollowProfile extends UserEvent{
+class FollowProfile extends UserEvent {
   final String userAddress;
   FollowProfile({@required this.userAddress});
   @override
   List<Object> get props => [userAddress];
+}
+
+class GetUserPosts extends UserEvent {
+  @override
+  List<Object> get props => [];
 }

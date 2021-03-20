@@ -18,31 +18,44 @@ class _UserFeedState extends State<UserFeed> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UserBloc>(
-      create: (_) => bloc,
+      create: (_) => bloc..add(GetUserPosts()),
       child: Scaffold(
-        appBar: AppBar(
-        leading: IconButton(
-        icon: Icon(
-          MaterialCommunityIcons.plus_box_outline,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Router.navigator.pushNamed(Router.addPostScreen);
-        }),
-        title: Text("Feed"),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-          icon: Icon(FlutterIcons.log_out_fea),
-          onPressed: () =>
-              BlocProvider.of<AuthBloc>(context)..add(LoggedOut()))
-        ],
-        ),
-        body: Center(
-          child: Text('Dashboard'),
-        ),
-      ),
+          appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(
+                  MaterialCommunityIcons.plus_box_outline,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Router.navigator.pushNamed(Router.addPostScreen);
+                }),
+            title: Text("Feed"),
+            centerTitle: true,
+            elevation: 0,
+            actions: [
+              IconButton(
+                  icon: Icon(FlutterIcons.log_out_fea),
+                  onPressed: () =>
+                      BlocProvider.of<AuthBloc>(context)..add(LoggedOut()))
+            ],
+          ),
+          body: BlocConsumer<UserBloc, UserState>(
+              builder: (BuildContext context, UserState state) {
+                if (state is UserPosts) {
+                  return ListView.builder(
+                      itemCount: state.posts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (state.posts[index].isImage)
+                          return Text('image');
+                        else
+                          return Text(state.posts[index].text);
+                      });
+                } else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+              listener: (BuildContext context, UserState state) {})),
     );
   }
 }

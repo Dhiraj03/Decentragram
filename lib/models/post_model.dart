@@ -6,7 +6,7 @@ class PostModel {
   final int likeCount;
   final int commentCount;
   final image;
-  final text;
+  final String text;
   final String caption;
   final bool isImage;
   final DateTime time;
@@ -19,7 +19,6 @@ class PostModel {
       @required this.isImage,
       @required this.time});
   factory PostModel.imagePost(Map<String, dynamic> json, var image) {
-    
     return PostModel(
         likeCount: json["likeCount"],
         image: image,
@@ -29,11 +28,12 @@ class PostModel {
         time: DateTime.parse(json["time"]));
   }
 
-  factory PostModel.textPost(Map<String, dynamic> json, var image) {
+  factory PostModel.textPost(Map<String, dynamic> json, String text) {
+    print('lol');
     return PostModel(
         likeCount: json["likeCount"],
-        image: image,
         caption: json["caption"],
+        text: text,
         commentCount: json["commentCount"],
         isImage: json["isImage"],
         time: DateTime.parse(json["time"]));

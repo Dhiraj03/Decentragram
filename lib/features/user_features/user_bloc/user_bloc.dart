@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:decentragram/backend/remote_datasource.dart';
 import 'package:decentragram/database/firestore_repository.dart';
+import 'package:decentragram/models/post_model.dart';
 import 'package:decentragram/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -90,6 +91,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       var response = await backend.followProfile(address, event.userAddress);
       yield Loading();
       yield Success(txHash: "You're following ${event.userAddress} now!");
+    } else if (event is GetUserPosts) {
+      String address = (await repo.getUser()).userAddress;
+      List<PostModel> posts = await backend.getUserPosts(address);
+      yield UserPosts(posts: posts);
     }
   }
 

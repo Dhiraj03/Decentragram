@@ -6,8 +6,9 @@ class LocalDataSource {
   //In case of text-based posts, a temporary file is created in the temp dir, and this file is uploaded to IPFS
   Future<File> storeFile(String data) async {
     var dir = await getTemporaryDirectory();
+    print(data);
     File tempFile = File('${dir.path}/temp.txt');
-    tempFile.writeAsString(data);
+    await tempFile.writeAsString(data);
     return tempFile;
   }
 }

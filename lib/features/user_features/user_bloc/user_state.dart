@@ -72,4 +72,9 @@ class SearchUserProfile extends UserState {
   List<Object> get props => [];
 }
 
-
+class UserPosts extends UserState {
+  final List<PostModel> posts;
+  UserPosts({@required this.posts});
+  @override
+  List<Object> get props => [posts];
+}
