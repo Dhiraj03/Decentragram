@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:decentragram/backend/local_datasource.dart';
 import 'package:decentragram/core/errors.dart';
 import 'package:decentragram/database/firestore_repository.dart';
+import 'package:decentragram/models/post_model.dart';
 import 'package:decentragram/models/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0x9b3e30cc7e1fbfd41640c5a5bb4ab8efe42f7a4e";
+      "0x5589da0efecfcf88f3ca1d261dfdf28b3bfad5c9";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
@@ -180,5 +181,48 @@ class RemoteDataSource {
       },
     ));
     return UserModel.myProfile(response.data["data"][0], address, image);
+  }
+
+  Future<PostModel> getPost(int id, String userAddress) async {
+    var response = await dioClient.get(url + "/getUserPost/$userAddress/$id");
+    var ipfsHash = response.data["data"][0]["ipfsHash"];
+    if (response.data["data"][0]["isImage"]) {
+      var image;
+      await dioClient
+          .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
+              options: Options(
+        responseDecoder: (responseBytes, options, responseBody) {
+          print(responseBytes);
+          image = responseBytes;
+        },
+      ));
+      return PostModel.imagePost(response.data["data"][0], image);
+    } else {
+      var image;
+      await dioClient
+          .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
+              options: Options(
+        responseDecoder: (responseBytes, options, responseBody) {
+          print(responseBytes);
+          image = responseBytes;
+        },
+      ));
+      return PostModel.textPost(response.data["data"][0], image);
+    }
+  }
+
+  Future<int> getPostCount(String userAddress) async {
+    var response = await dioClient.get(url + "/getPostCount/$userAddress");
+    return response.data["data"][0]["postCount"];
+  }
+
+  Future<List<PostModel>> getUserPosts(String userAddress) async {
+    int postCount = await getPostCount(userAddress);
+    List<PostModel> posts = [];
+    for (int i = 0; i < postCount; i++) {
+      var post = await getPost(i, userAddress);
+      posts.add(post);
+    }
+    return posts;
   }
 }
