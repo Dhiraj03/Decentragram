@@ -92,7 +92,7 @@ contract Decentragram {
     }
     
     //Checks if two users follow each other
-    function doesFollow(address userAddress, address followAddress) public view checkUserExists(userAddress) checkUserDoesntExists(followAddress) returns (bool follows)
+    function doesFollow(address userAddress, address followAddress) public view checkUserExists(userAddress) checkUserExists(followAddress) returns (bool follows)
     {
         for(uint256 i=0;i<users[userAddress].friends.length;i++)
          {
