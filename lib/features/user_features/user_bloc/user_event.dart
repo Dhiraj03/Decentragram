@@ -44,3 +44,11 @@ class PublishImagePost extends UserEvent {
   @override
   List<Object> get props => [caption];
 }
+
+class PublishTextPost extends UserEvent {
+  final String caption;
+  final String text;
+  PublishTextPost({@required this.caption, @required this.text});
+  @override
+  List<Object> get props => [caption, text];
+}

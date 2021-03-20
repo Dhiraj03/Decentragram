@@ -42,8 +42,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield AskPostType();
     } else if (event is PostType) {
       if (event.type == "Image") yield ImagePostType(image: image);
-    } else if (event is PostType) {
-      if (event.type == "Text") yield TextPostType();
+     else if  (event.type == "Text") yield TextPostType();
     } else if (event is PickImagePost) {
       image = await pickImage();
       yield ImagePostType(image: image);
@@ -54,6 +53,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Loading();
       var response = await backend.publishImagePost(
           time, image, event.caption, userAddress);
+      print(response.toString());
+      yield* response.fold((failure) async* {
+        yield Failure(errorMessage: failure.message);
+        yield ImagePostType(image: image);
+      }, (success) async* {
+        yield Success(txHash: success);
+      });
+    }
+    else if(event is PublishTextPost)
+    {
+      String time = DateTime.now().toIso8601String();
+      UserModel userDetails = await repo.getUser();
+      String userAddress = userDetails.userAddress;
+      yield Loading();
+      var response = await backend.publishTextPost(
+          time, event.text, event.caption, userAddress);
       print(response.toString());
       yield* response.fold((failure) async* {
         yield Failure(errorMessage: failure.message);

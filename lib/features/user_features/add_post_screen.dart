@@ -77,7 +77,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 40,
+                    child: Text('Or', style: TextStyle(fontSize: 35),)
                   ),
                   Expanded(
                       flex: 1,
@@ -190,7 +191,50 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
               ),
             );
-          } else
+          } else if(state is TextPostType)
+          {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                  child: TextFormField(                 
+                      maxLength: 1000,
+                      maxLines: 10,
+                      maxLengthEnforced: true,
+                      style: TextStyle(fontSize: 17, height: 1.35),
+                      controller: captionController,
+                      decoration: InputDecoration(
+                        labelText: "Share your thoughts here",
+                          contentPadding: EdgeInsets.all(13),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: primaryColor.withOpacity(0.1)),
+                              borderRadius: BorderRadius.circular(5)))),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FloatingActionButton(
+                    backgroundColor: primaryColor,
+                    child: Icon(
+                      Icons.publish,
+                      size: 40,
+                    ),
+                    onPressed: () {
+                      bloc
+                        ..add(PublishImagePost(
+                            caption: captionController.text.isEmpty
+                                ? "null"
+                                : captionController.text));
+                    })
+              ],
+            );
+          } 
+          else
             return Center(
               child: CircularProgressIndicator(),
             );

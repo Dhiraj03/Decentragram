@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:decentragram/backend/local_datasource.dart';
 import 'package:decentragram/core/errors.dart';
 import 'package:decentragram/database/firestore_repository.dart';
 import 'package:decentragram/models/user_model.dart';
@@ -18,6 +19,7 @@ class RemoteDataSource {
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
   FirestoreRepository repo = FirestoreRepository();
+  LocalDataSource localDataSource = LocalDataSource();
 
   Future<Either<ErrorMessage, String>> addUser(
       String username, File profileImage) async {
@@ -75,6 +77,39 @@ class RemoteDataSource {
     print(requestMap.toString());
     try {
       var response = await dioClient.post(url + "/postImage",
+          data: requestMap,
+          options: Options(headers: {
+            "X-API-KEY": [apiKey]
+          }, contentType: Headers.formUrlEncodedContentType));
+      print(response.toString());
+      return Right(response.data["data"][0]["txHash"]);
+    } catch (e) {
+      print(e.response);
+      print('lmao');
+      return Left(ErrorMessage(message: "Error!"));
+    }
+  }
+
+  Future<Either<ErrorMessage, String>> publishTextPost(String time, String text, String caption, String userAddress) async {
+    File file = await localDataSource.storeFile(text);
+    final Map<String, dynamic> map = {
+      'file' : await MultipartFile.fromFile(file.path);
+    };
+    var ipfsHash;
+    var ipfsResponse =
+        await dioClient.post<dynamic>(ipfs, data: FormData.fromMap(map));
+    if (ipfsResponse.statusCode != 200)
+      return Left(ErrorMessage(message: ipfsResponse.data.toString()));
+    else
+      ipfsHash = ipfsResponse.data["Hash"];
+    Map<String, dynamic> requestMap = {
+      "userAddress": userAddress,
+      "ipfsHash": ipfsHash,
+      "caption": caption,
+      "time": time
+    };
+    try {
+      var response = await dioClient.post(url + "/postText",
           data: requestMap,
           options: Options(headers: {
             "X-API-KEY": [apiKey]
