@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.17;
 contract Decentragram {
     struct User {
         int256 id;
@@ -8,6 +8,7 @@ contract Decentragram {
         address[] friends;
 
         Post[] posts;
+        uint256 postLength;
         
         address[] interactions;
         mapping (address => Message[]) chats;
@@ -80,12 +81,13 @@ contract Decentragram {
         uint256 chatCount
         )
     {
-        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash, users[userAddress].friends.length, users[userAddress].posts.length, users[userAddress].interactions.length);
+        return (users[userAddress].id, users[userAddress].username, users[userAddress].dpIpfsHash, users[userAddress].friends.length, users[userAddress].postLength, users[userAddress].interactions.length);
     }
     
     
     //Post Image
     function postImage(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
+        users[userAddress].postLength++;
         address[] memory likes;
         Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
         users[userAddress].posts.push(post);
@@ -93,6 +95,7 @@ contract Decentragram {
     
     //Upload text-based posts
     function postText(address userAddress, string memory ipfsHash, string memory caption, string memory time) public checkUserExists(userAddress) {
+        users[userAddress].postLength++;
         address[] memory likes;
         Post memory post = Post({ipfsHash: ipfsHash, caption: caption, commentCount:0,time: time, likes: likes});
         users[userAddress].posts.push(post);
@@ -102,7 +105,7 @@ contract Decentragram {
     function getPostCount(address userAddress) public checkUserExists(userAddress) view
     returns (uint256 postCount)
     {
-        return users[userAddress].posts.length;
+        return users[userAddress].postLength;
     }
     
     //Retrieves details of post
