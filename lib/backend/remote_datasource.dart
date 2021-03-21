@@ -234,4 +234,30 @@ class RemoteDataSource {
     }
     return posts;
   }
+
+  Future<bool> hasLiked(
+      String userAddress, String followAddress, int postID) async {
+    var response = await dioClient
+        .get(url + "/hasLiked/$userAddress/$postID/$followAddress");
+    return response.data["data"][0]["hasLiked"];
+  }
+
+  Future<void> like(String userAddress, String followAddress, int postID) async {
+    Map<String, dynamic> requestMap = {
+      "userAddress" : userAddress,
+      "postID" : postID,
+      "followAddress": followAddress
+    }; 
+    try {
+      var response = await dioClient.post(url + "/likePost",
+          data: requestMap,
+          options: Options(headers: {
+            "X-API-KEY": [apiKey]
+          }, contentType: Headers.formUrlEncodedContentType));
+      print(response.toString());
+      return Right(response.data["data"][0]["txHash"]);
+    } catch (e) {
+      return Left(ErrorMessage(message: "Error!"));
+    }
+  }
 }
