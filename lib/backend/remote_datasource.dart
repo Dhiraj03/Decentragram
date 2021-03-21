@@ -226,6 +226,7 @@ class RemoteDataSource {
 
   Future<List<PostModel>> getUserPosts(String userAddress) async {
     int postCount = await getPostCount(userAddress);
+    print(postCount);
     List<PostModel> posts = [];
     for (int i = 0; i < postCount; i++) {
       var post = await getPost(i, userAddress);

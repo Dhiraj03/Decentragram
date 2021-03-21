@@ -38,7 +38,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       UserModel userDetails = await repo.getUser();
       String userAddress = userDetails.userAddress;
       UserModel user = await backend.getUserProfile(userAddress);
-      yield UserProfile(profile: user);
+      List<PostModel> posts = await backend.getUserPosts(userAddress);
+      yield UserProfile(profile: user, posts: posts);
     } else if (event is GetPostType) {
       yield AskPostType();
     } else if (event is PostType) {
