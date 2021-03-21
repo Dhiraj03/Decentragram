@@ -97,7 +97,7 @@ class _NewUserDetailsScreenState extends State<NewUserDetailsScreen> {
                     child: FlatButton(
                         shape: flatButtonBorder,
                         color: Theme.of(context).primaryColor.withAlpha(220),
-                        child: Text('Save Profile'),
+                        child: Text('Save Profile', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
                         onPressed: () {
                           BlocProvider.of<NewUserProfileBloc>(context)
                             ..add(

@@ -16,7 +16,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0xc01a7987c2ca8aa85fa5be17b4be89544d9745b4";
+      "0xc1f7e99192cbb348d2224dbb97d5543e31e0d3e0";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
