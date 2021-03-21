@@ -187,7 +187,8 @@ class RemoteDataSource {
     return UserModel.myProfile(response.data["data"][0], address, image);
   }
 
-  Future<PostModel> getPost(int id, String userAddress, String followAddress) async {
+  Future<PostModel> getPost(
+      int id, String userAddress, String followAddress) async {
     var response = await dioClient.get(url + "/getUserPost/$userAddress/$id");
     var ipfsHash = response.data["data"][0]["ipfsHash"];
     if (response.data["data"][0]["isImage"]) {
@@ -200,6 +201,8 @@ class RemoteDataSource {
         },
       ));
       var isLiked = await hasLiked(userAddress, followAddress, id);
+      print("isLiked");
+      print(isLiked);
       return PostModel.imagePost(response.data["data"][0], image, isLiked);
     } else {
       print(ipfsHash);
@@ -214,6 +217,8 @@ class RemoteDataSource {
             },
           ));
       var isLiked = await hasLiked(userAddress, followAddress, id);
+      print("isLiked");
+      print(isLiked);
       return PostModel.textPost(
           response.data["data"][0], utf8.decode(ipfsResponse.data), isLiked);
     }
@@ -224,7 +229,8 @@ class RemoteDataSource {
     return response.data["data"][0]["postCount"];
   }
 
-  Future<List<PostModel>> getUserPosts(String userAddress, String followAddress) async {
+  Future<List<PostModel>> getUserPosts(
+      String userAddress, String followAddress) async {
     int postCount = await getPostCount(userAddress);
     print(postCount);
     List<PostModel> posts = [];
@@ -237,17 +243,19 @@ class RemoteDataSource {
 
   Future<bool> hasLiked(
       String userAddress, String followAddress, int postID) async {
+    print("here");
     var response = await dioClient
-        .get(url + "/hasLiked/$userAddress/$postID/$followAddress");
+        .get(url + "/hasLikedPost/$userAddress/$postID/$followAddress");
     return response.data["data"][0]["hasLiked"];
   }
 
-  Future<void> like(String userAddress, String followAddress, int postID) async {
+  Future<void> like(
+      String userAddress, String followAddress, int postID) async {
     Map<String, dynamic> requestMap = {
-      "userAddress" : userAddress,
-      "postID" : postID,
+      "userAddress": userAddress,
+      "postID": postID,
       "followAddress": followAddress
-    }; 
+    };
     try {
       var response = await dioClient.post(url + "/likePost",
           data: requestMap,

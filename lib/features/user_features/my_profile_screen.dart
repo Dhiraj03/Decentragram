@@ -91,69 +91,69 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             if (state.posts[index].isImage)
                               return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    leading: CircleAvatar(
-                                      backgroundImage: MemoryImage(
-                                          state.profile.profileImage),
-                                    ),
-                                    title: Text(state.profile.username),
-                                    subtitle: Text(dateFromString(
-                                        state.posts[index].time))),
-                                Text(
-                                  state.posts[index].caption,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  height: 300,
-                                  width: MediaQuery.of(context).size.width - 20,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage ( 
-                                      image: MemoryImage(state.posts[index].image),
-                                      alignment: Alignment.center,
-                                      fit: BoxFit.fitHeight
-                                    )
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      leading: CircleAvatar(
+                                        backgroundImage: MemoryImage(
+                                            state.profile.profileImage),
+                                      ),
+                                      title: Text(state.profile.username),
+                                      subtitle: Text(dateFromString(
+                                          state.posts[index].time))),
+                                  Text(
+                                    state.posts[index].caption,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    IconButton(
-                                      iconSize: 30,
-                                      padding: EdgeInsets.zero,
-                                      icon: Icon(MaterialCommunityIcons.heart_outline, ), 
-                                      onPressed: ()
-                                      {
-
-                                      }),
-                                    Text(state.posts[index].likeCount.toString()),
-                                    SizedBox(
-                                      width: 25,
-                                    ),
-                                    IconButton(
-                                      padding: EdgeInsets.zero,
-                                      iconSize: 30,
-                                    icon: Icon(MaterialCommunityIcons.comment_outline), 
-                                    onPressed: ()
-                                    {
-
-                                    }),
-                                    Text(state.posts[index].commentCount.toString()),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                )
-                              ],
-                            );
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    height: 300,
+                                    width:
+                                        MediaQuery.of(context).size.width - 20,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: MemoryImage(
+                                                state.posts[index].image),
+                                            alignment: Alignment.center,
+                                            fit: BoxFit.fitHeight)),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      IconButton(
+                                          iconSize: 25,
+                                          padding: EdgeInsets.zero,
+                                          icon: Icon(
+                                            MaterialCommunityIcons
+                                                .heart_outline,
+                                          ),
+                                          onPressed: () {}),
+                                      Text(state.posts[index].likeCount
+                                          .toString()),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      IconButton(
+                                          padding: EdgeInsets.zero,
+                                          iconSize: 25,
+                                          icon: Icon(MaterialCommunityIcons
+                                              .comment_outline),
+                                          onPressed: () {}),
+                                      Text(state.posts[index].commentCount
+                                          .toString()),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  )
+                                ],
+                              );
                             else
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,26 +185,43 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       IconButton(
-                                        iconSize: 30,
-                                        padding: EdgeInsets.zero,
-                                        icon: Icon(MaterialCommunityIcons.heart_outline, ), 
-                                        onPressed: ()
-                                        {
-
-                                        }),
-                                      Text(state.posts[index].likeCount.toString()),
+                                          iconSize: 25,
+                                          padding: EdgeInsets.zero,
+                                          icon: state.posts[index].isLiked
+                                              ? Icon(
+                                                  MaterialCommunityIcons.heart,
+                                                  color: red,
+                                                )
+                                              : Icon(
+                                                  MaterialCommunityIcons
+                                                      .heart_outline,
+                                                  color: red,
+                                                ),
+                                          onPressed: () {
+                                            bloc
+                                              ..add(LikePost(
+                                                  followAddress:
+                                                      state.profile.userAddress,
+                                                  postID: index,
+                                                  userAddress: state
+                                                      .profile.userAddress));
+                                            bloc..add(GetMyProfile());
+                                          }),
+                                      Text(state.posts[index].likeCount
+                                          .toString()),
                                       SizedBox(
                                         width: 25,
                                       ),
                                       IconButton(
-                                        padding: EdgeInsets.zero,
-                                        iconSize: 30,
-                                      icon: Icon(MaterialCommunityIcons.comment_outline), 
-                                      onPressed: ()
-                                      {
-
-                                      }),
-                                      Text(state.posts[index].commentCount.toString()),
+                                          padding: EdgeInsets.zero,
+                                          iconSize: 25,
+                                          icon: Icon(
+                                              MaterialCommunityIcons
+                                                  .comment_outline,
+                                              color: secondaryColor),
+                                          onPressed: () {}),
+                                      Text(state.posts[index].commentCount
+                                          .toString()),
                                     ],
                                   ),
                                   SizedBox(
