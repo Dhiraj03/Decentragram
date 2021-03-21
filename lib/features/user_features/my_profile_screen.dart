@@ -90,8 +90,43 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             if (state.posts[index].isImage)
                               return Column(
-                                children: [],
-                              );
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: CircleAvatar(
+                                      backgroundImage: MemoryImage(
+                                          state.profile.profileImage),
+                                    ),
+                                    title: Text(state.profile.username),
+                                    subtitle: Text(dateFromString(
+                                        state.posts[index].time))),
+                                Text(
+                                  state.posts[index].caption,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  height: 300,
+                                  width: MediaQuery.of(context).size.width - 20,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage ( 
+                                      image: MemoryImage(state.posts[index].image),
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.fitHeight
+                                    )
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                )
+                              ],
+                            );
                             else
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
