@@ -1,27 +1,35 @@
 pragma solidity ^0.5.0;
 contract Decentragram {
+    //Structure to represent a user of the network
     struct User {
+        //Unique ID for the user
         int256 id;
         string username;
+        //The IPFS hash of the display picture of the user
         string dpIpfsHash;
         
+        //An array of addresses of the user's friends
         address[] friends;
 
+        //Array of user posts
         Post[] posts;
         uint256 postLength;
         
+        //An array of all chats - each chat is represented as the address of the other participant
         address[] interactions;
+        //Each chat participant is mapped to a list of messages (custom struct)
         mapping (address => Message[]) chats;
         
     }
     
     struct Post {
-        int256 commentCount;
+        uint256 commentCount;
         string ipfsHash;
         string caption;
-        mapping (int256 => Comment) comments;
+        mapping (uint256 => Comment) comments;
         bool isImage;
         address[] likes;
+        mapping(address => bool) liked;
         string time;
     }
     
@@ -51,6 +59,7 @@ contract Decentragram {
         require(users[userAddress].id != 0, "This user doesn't exist.");
         _;
     }
+    
     
     modifier checkNotSame(address userAddress, address followAddress) 
     {
@@ -129,7 +138,7 @@ contract Decentragram {
     function getUserPost(address userAddress, uint256 id) public checkUserExists(userAddress)  view
     returns (
         uint256 likeCount,
-        int256 commentCount,
+        uint256 commentCount,
         string memory ipfsHash,
         string memory caption,
         string memory time,
@@ -147,9 +156,30 @@ contract Decentragram {
             );
     }
     
-    function getPostComment(address userAddress, uint256 postID, int256 commentID) public view
+    //Function to check if a user has already liked a post
+    function hasLikedPost(address userAddress, uint256 postID, address followAddress) public view checkUserExists(userAddress) checkUserExists(followAddress) returns (bool hasLiked)
+    {
+        return users[userAddress].posts[postID].liked[followAddress];
+    }
+    
+    //Function to like a post
+    function likePost(address userAddress, uint256 postID, address followAddress) public  checkUserExists(userAddress) checkUserExists(followAddress) {
+        users[userAddress].posts[postID].liked[followAddress] = true;
+        users[userAddress].posts[postID].likes.push(followAddress);
+    }
+    
+    //Comment on a post - given post ID
+    function comment(address userAddress, uint256 postID, address followAddress, string  memory content)public  checkUserExists(userAddress) checkUserExists(followAddress) {
+        
+        Comment memory _comment = Comment({userAddress: followAddress, content : content});
+        users[userAddress].posts[postID].comments[users[userAddress].posts[postID].commentCount] = _comment;
+        users[userAddress].posts[postID].commentCount++;
+    }
+    
+    //Retrieves the username and comment of a particulat user - given the post and comment ID
+    function getPostComment(address userAddress, uint256 postID, uint256 commentID) public view
     returns (
-        string memory comment,
+        string memory _comment,
         string memory username
         )
         {
