@@ -77,6 +77,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                     if (state.posts != null)
                       ListView.separated(
+                          reverse: true,
                           physics: ScrollPhysics(),
                           padding: EdgeInsets.only(left: 10, top: 0),
                           separatorBuilder: (BuildContext context, int index) {
