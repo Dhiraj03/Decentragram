@@ -123,8 +123,34 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     )
                                   ),
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    IconButton(
+                                      iconSize: 30,
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(MaterialCommunityIcons.heart_outline, ), 
+                                      onPressed: ()
+                                      {
+
+                                      }),
+                                    Text(state.posts[index].likeCount.toString()),
+                                    SizedBox(
+                                      width: 25,
+                                    ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      iconSize: 30,
+                                    icon: Icon(MaterialCommunityIcons.comment_outline), 
+                                    onPressed: ()
+                                    {
+
+                                    }),
+                                    Text(state.posts[index].commentCount.toString()),
+                                  ],
+                                ),
                                 SizedBox(
-                                  height: 15,
+                                  height: 5,
                                 )
                               ],
                             );
@@ -155,8 +181,34 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     state.posts[index].text,
                                     style: TextStyle(color: Colors.white54),
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      IconButton(
+                                        iconSize: 30,
+                                        padding: EdgeInsets.zero,
+                                        icon: Icon(MaterialCommunityIcons.heart_outline, ), 
+                                        onPressed: ()
+                                        {
+
+                                        }),
+                                      Text(state.posts[index].likeCount.toString()),
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
+                                        iconSize: 30,
+                                      icon: Icon(MaterialCommunityIcons.comment_outline), 
+                                      onPressed: ()
+                                      {
+
+                                      }),
+                                      Text(state.posts[index].commentCount.toString()),
+                                    ],
+                                  ),
                                   SizedBox(
-                                    height: 15,
+                                    height: 5,
                                   )
                                 ],
                               );
