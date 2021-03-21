@@ -187,7 +187,7 @@ class RemoteDataSource {
     return UserModel.myProfile(response.data["data"][0], address, image);
   }
 
-  Future<PostModel> getPost(int id, String userAddress) async {
+  Future<PostModel> getPost(int id, String userAddress, String followAddress) async {
     var response = await dioClient.get(url + "/getUserPost/$userAddress/$id");
     var ipfsHash = response.data["data"][0]["ipfsHash"];
     if (response.data["data"][0]["isImage"]) {
@@ -199,8 +199,8 @@ class RemoteDataSource {
           image = responseBytes;
         },
       ));
-
-      return PostModel.imagePost(response.data["data"][0], image);
+      var isLiked = await hasLiked(userAddress, followAddress, id);
+      return PostModel.imagePost(response.data["data"][0], image, isLiked);
     } else {
       print(ipfsHash);
       var image;
@@ -213,9 +213,9 @@ class RemoteDataSource {
               image = responseBytes;
             },
           ));
-
+      var isLiked = await hasLiked(userAddress, followAddress, id);
       return PostModel.textPost(
-          response.data["data"][0], utf8.decode(ipfsResponse.data));
+          response.data["data"][0], utf8.decode(ipfsResponse.data), isLiked);
     }
   }
 
@@ -224,12 +224,12 @@ class RemoteDataSource {
     return response.data["data"][0]["postCount"];
   }
 
-  Future<List<PostModel>> getUserPosts(String userAddress) async {
+  Future<List<PostModel>> getUserPosts(String userAddress, String followAddress) async {
     int postCount = await getPostCount(userAddress);
     print(postCount);
     List<PostModel> posts = [];
     for (int i = 0; i < postCount; i++) {
-      var post = await getPost(i, userAddress);
+      var post = await getPost(i, userAddress, followAddress);
       posts.add(post);
     }
     return posts;

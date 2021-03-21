@@ -38,7 +38,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       UserModel userDetails = await repo.getUser();
       String userAddress = userDetails.userAddress;
       UserModel user = await backend.getUserProfile(userAddress);
-      List<PostModel> posts = await backend.getUserPosts(userAddress);
+      List<PostModel> posts = await backend.getUserPosts(userAddress, userAddress);
       yield UserProfile(profile: user, posts: posts);
     } else if (event is GetPostType) {
       yield AskPostType();
@@ -94,7 +94,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Success(txHash: "You're following ${event.userAddress} now!");
     } else if (event is GetUserPosts) {
       String address = (await repo.getUser()).userAddress;
-      List<PostModel> posts = await backend.getUserPosts(address);
+      //CHANGES REQUIRED
+      List<PostModel> posts = await backend.getUserPosts(address, address);
       yield UserPosts(posts: posts);
     }
   }
