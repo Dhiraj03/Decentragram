@@ -86,10 +86,7 @@ class _SearchUserProfileScreenState extends State<SearchUserProfileScreen> {
                       ),
                       state.following
                           ? FlatButton.icon(
-                              onPressed: () {
-                                // bloc
-                                //   ..add(FollowProfile(
-                                //       userAddress: user.userAddress));
+                              onPressed: () {   
                               },
                               icon: Icon(
                                 FlutterIcons.user_following_sli,

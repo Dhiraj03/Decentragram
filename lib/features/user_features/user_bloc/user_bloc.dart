@@ -26,6 +26,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   ) async* {
     if (event is SearchUser) {
       yield Loading();
+      bool self;
+      String address = (await repo.getUser()).username;
+      print(address);
+      self = (address == event.username);
+      print(self);
+      if (self) yield Failure(errorMessage: "User not found!");
       String result = await repo.searchUser(event.username);
       if (result == null) {
         yield Failure(errorMessage: "User not found!");
@@ -119,4 +125,3 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return File(file.path);
   }
 }
-

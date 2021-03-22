@@ -17,7 +17,9 @@ class UserModel {
       this.postCount,
       this.userID});
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(userAddress: json["address"]);
+    return UserModel(
+      username: json["username"],
+      userAddress: json["address"]);
   }
 
   factory UserModel.basic(Map<String, dynamic> json) {
