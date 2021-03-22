@@ -294,6 +294,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                               .pop();
                                                               bloc
                                                                 ..add(AddComment(
+                                                                    followAddress: state.profile.userAddress,
                                                                     comment:
                                                                         commentController
                                                                             .text,

@@ -279,7 +279,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         }, listener: (BuildContext context, UserState state) {
           if (state is Success) {
             Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text(state.txHash)))
+                .showSnackBar(SnackBar(content: Text(state.message)))
                 .closed
                 .then((value) {
               Router.navigator.pop();

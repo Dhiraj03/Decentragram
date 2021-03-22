@@ -18,12 +18,12 @@ class SearchUserProfileScreen extends StatefulWidget {
 }
 
 class _SearchUserProfileScreenState extends State<SearchUserProfileScreen> {
+  //This is the user that has been searched for 
   UserModel get user => widget.user;
 
   UserBloc bloc = UserBloc();
   @override
   Widget build(BuildContext context) {
-    print(user.userAddress);
     return BlocProvider<UserBloc>(
       create: (BuildContext context) =>
           bloc..add(GetSearchUserProfile(userAddress: user.userAddress)),
@@ -123,7 +123,7 @@ class _SearchUserProfileScreenState extends State<SearchUserProfileScreen> {
             .showSnackBar(SnackBar(content: CircularProgressIndicator(), backgroundColor: secondaryColor,));
              else if (state is Success)
               Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.txHash), backgroundColor: secondaryColor,));
+                  .showSnackBar(SnackBar(content: Text(state.message), backgroundColor: secondaryColor,));
           },
         ),
       ),

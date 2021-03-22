@@ -18,7 +18,7 @@ class _UserFeedState extends State<UserFeed> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UserBloc>(
-      create: (_) => bloc..add(GetUserPosts()),
+      create: (_) => bloc..add(GetUserPosts(self: true)),
       child: Scaffold(
           appBar: AppBar(
             leading: IconButton(

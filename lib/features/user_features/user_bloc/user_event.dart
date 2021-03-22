@@ -68,6 +68,9 @@ class FollowProfile extends UserEvent {
 }
 
 class GetUserPosts extends UserEvent {
+  bool self;
+  final String userAddress;
+  GetUserPosts({@required this.self, this.userAddress});
   @override
   List<Object> get props => [];
 }
@@ -86,12 +89,15 @@ class LikePost extends UserEvent {
 
 class AddComment extends UserEvent {
   final String comment;
+  final String followAddress;
   final String userAddress;
   final int postID;
   AddComment(
       {@required this.comment,
       @required this.postID,
-      @required this.userAddress});
+      @required this.userAddress,
+      @required this.followAddress
+      });
   @override
-  List<Object> get props => [comment, postID, userAddress];
+  List<Object> get props => [comment, postID, userAddress, followAddress];
 }

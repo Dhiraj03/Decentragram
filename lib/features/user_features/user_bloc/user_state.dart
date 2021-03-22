@@ -54,10 +54,10 @@ class TextPostType extends UserState {
 }
 
 class Success extends UserState {
-  final String txHash;
-  Success({@required this.txHash});
+  final String message;
+  Success({@required this.message});
   @override
-  List<Object> get props => [txHash];
+  List<Object> get props => [message];
 }
 
 class RedirectToDashboard extends UserState {
@@ -66,9 +66,8 @@ class RedirectToDashboard extends UserState {
 }
 
 class SearchUserProfile extends UserState {
-  final bool self;
   final bool following;
-  SearchUserProfile({@required this.following, @required this.self});
+  SearchUserProfile({@required this.following});
   @override
   List<Object> get props => [];
 }
