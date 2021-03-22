@@ -198,14 +198,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   color: red,
                                                 ),
                                           onPressed: () {
-                                            bloc
-                                              ..add(LikePost(
-                                                  followAddress:
-                                                      state.profile.userAddress,
-                                                  postID: index,
-                                                  userAddress: state
-                                                      .profile.userAddress));
-                                            bloc..add(GetMyProfile());
+                                            if (!state.posts[index].isLiked) {
+                                              bloc
+                                                ..add(LikePost(
+                                                    followAddress: state
+                                                        .profile.userAddress,
+                                                    postID: index,
+                                                    userAddress: state
+                                                        .profile.userAddress));
+                                              bloc..add(GetMyProfile());
+                                            }
                                           }),
                                       Text(state.posts[index].likeCount
                                           .toString()),
@@ -219,7 +221,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               MaterialCommunityIcons
                                                   .comment_outline,
                                               color: secondaryColor),
-                                          onPressed: () {}),
+                                          onPressed: () {
+                                            Scaffold.of(context)
+                                                .showBottomSheet((context) {
+                                                  return Container(
+                                                    height: 400,
+                                                    color: grey,
+                                                    child: ListView(
+                                                      
+                                                    ),
+                                                  );
+
+                                                });
+                                          }),
                                       Text(state.posts[index].commentCount
                                           .toString()),
                                     ],
