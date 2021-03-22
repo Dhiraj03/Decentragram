@@ -37,14 +37,11 @@ class RemoteDataSource {
     else
       ipfsHash = ipfsResponse.data["Hash"];
     UserModel user = await repo.getUser();
-    print(user.userAddress);
     Map<String, dynamic> requestMap = {
       "userAddress": user.userAddress,
       "username": username,
       "dpIpfsHash": ipfsHash
     };
-    print("User Address" + user.userAddress);
-    print(ipfsHash);
     try {
       var response = await dioClient.post(url + "/createProfile",
           data: requestMap,
@@ -54,7 +51,6 @@ class RemoteDataSource {
       repo.initialProfileSaved(username);
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
-      print(e.response);
       return Left(ErrorMessage(message: "Error!"));
     }
   }
@@ -77,18 +73,14 @@ class RemoteDataSource {
       "caption": caption,
       "time": time
     };
-    print(requestMap.toString());
     try {
       var response = await dioClient.post(url + "/postImage",
           data: requestMap,
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      print(response.toString());
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
-      print(e.response);
-      print('lmao');
       return Left(ErrorMessage(message: "Error!"));
     }
   }
@@ -100,7 +92,6 @@ class RemoteDataSource {
       'file': await MultipartFile.fromBytes(File(file.path).readAsBytesSync(),
           filename: file.path.split("/").last)
     };
-    print(file.readAsStringSync().toString());
     var ipfsHash;
     var ipfsResponse = await dioClient.post<dynamic>(
       ipfs,
@@ -122,11 +113,8 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      print(response.toString());
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
-      print(e.response);
-      print('lmao');
       return Left(ErrorMessage(message: "Error!"));
     }
   }
@@ -150,7 +138,6 @@ class RemoteDataSource {
 
   Future<bool> doesFollowProfile(
       String userAddress, String followAddress) async {
-    print('lol');
     var response =
         await dioClient.get(url + "/doesFollow/$userAddress/$followAddress");
     return response.data["data"][0]["follows"];
@@ -165,7 +152,6 @@ class RemoteDataSource {
         .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
             options: Options(
       responseDecoder: (responseBytes, options, responseBody) {
-        print(responseBytes);
         image = responseBytes;
       },
     ));
@@ -181,7 +167,6 @@ class RemoteDataSource {
         .post('https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
             options: Options(
       responseDecoder: (responseBytes, options, responseBody) {
-        print(responseBytes);
         image = responseBytes;
       },
     ));
@@ -207,14 +192,12 @@ class RemoteDataSource {
       return PostModel.imagePost(
           response.data["data"][0], image, isLiked, comments);
     } else {
-      print(ipfsHash);
       var image;
       var ipfsResponse = await dioClient.post(
           'https://ipfs.infura.io:5001/api/v0/cat?arg=$ipfsHash',
           options: Options(
             responseType: ResponseType.bytes,
             responseDecoder: (responseBytes, options, responseBody) {
-              print(responseBytes);
               image = responseBytes;
             },
           ));
@@ -234,7 +217,6 @@ class RemoteDataSource {
   Future<List<PostModel>> getUserPosts(
       String userAddress, String followAddress) async {
     int postCount = await getPostCount(userAddress);
-    print(postCount);
     List<PostModel> posts = [];
     for (int i = 0; i < postCount; i++) {
       var post = await getPost(i, userAddress, followAddress);
@@ -262,7 +244,6 @@ class RemoteDataSource {
 
   Future<bool> hasLiked(
       String userAddress, String followAddress, int postID) async {
-    print("here");
     var response = await dioClient
         .get(url + "/hasLikedPost/$userAddress/$postID/$followAddress");
     return response.data["data"][0]["hasLiked"];
@@ -281,7 +262,6 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      print(response.toString());
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
       return Left(ErrorMessage(message: "Error!"));
@@ -302,7 +282,6 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      print("Response" + response.toString());
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
       return Left(ErrorMessage(message: "Error!"));

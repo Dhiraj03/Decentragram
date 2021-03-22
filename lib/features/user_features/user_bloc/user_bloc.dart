@@ -37,9 +37,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Loading();
       bool self;
       String address = (await repo.getUser()).username;
-      print("Address" + address);
       self = (address == event.username);
-      print(self);
       if (self) {
         yield Failure(errorMessage: "User not found!");
       } else {
@@ -80,7 +78,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Loading();
       var response = await backend.publishImagePost(
           time, image, event.caption, userAddress);
-      print(response.toString());
       yield* response.fold((failure) async* {
         yield Failure(errorMessage: failure.message);
         yield ImagePostType(image: image);
@@ -95,7 +92,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Loading();
       var response = await backend.publishTextPost(
           time, event.text, event.caption, userAddress);
-      print(response.toString());
       yield* response.fold((failure) async* {
         yield Failure(errorMessage: failure.message);
         yield ImagePostType(image: image);

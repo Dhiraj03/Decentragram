@@ -54,11 +54,8 @@ class FirestoreRepository {
 
   //Search for a user in the network with the use of their "username" and return their Ethereum User Address
   Future<String> searchUser(String username) async {
-    print('inside');
     var querySnapshot = await ref.where("username", isEqualTo: username).get();
     if (querySnapshot.size != 0) {
-      print('lmao');
-      print(querySnapshot.docs[0].get("address"));
       return querySnapshot.docs[0].get("address");
     } else
       return null;
