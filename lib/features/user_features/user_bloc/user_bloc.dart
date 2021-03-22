@@ -100,8 +100,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield UserPosts(posts: posts);
     } else if (event is LikePost) {
       yield Loading();
-      await backend.like(event.userAddress, event.followAddress, event.postID); 
-      
+      await backend.like(event.userAddress, event.followAddress, event.postID);
+    } else if (event is AddComment) {
+      yield Loading();
+      String followAddress = (await repo.getUser()).userAddress;
+      var response = await backend.comment(
+          event.userAddress, event.postID, followAddress, event.comment);
+      String userAddress = event.userAddress;
+      UserModel user = await backend.getUserProfile(userAddress);
+      List<PostModel> posts =
+          await backend.getUserPosts(userAddress, userAddress);
+      yield UserProfile(profile: user, posts: posts);
     }
   }
 
@@ -110,3 +119,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return File(file.path);
   }
 }
+

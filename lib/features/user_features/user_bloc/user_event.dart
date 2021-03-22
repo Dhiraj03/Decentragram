@@ -83,3 +83,15 @@ class LikePost extends UserEvent {
   @override
   List<Object> get props => [userAddress, followAddress, postID];
 }
+
+class AddComment extends UserEvent {
+  final String comment;
+  final String userAddress;
+  final int postID;
+  AddComment(
+      {@required this.comment,
+      @required this.postID,
+      @required this.userAddress});
+  @override
+  List<Object> get props => [comment, postID, userAddress];
+}
