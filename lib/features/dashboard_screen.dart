@@ -20,8 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   TabController tabController;
   @override
   void initState() {
-    pageController = PageController(initialPage: 2);
-    tabController = TabController(length: 3, vsync: this, initialIndex: 2);
+    pageController = PageController(initialPage: 1);
+    tabController = TabController(length: 2, vsync: this, initialIndex: 1);
     super.initState();
   }
 
@@ -39,9 +39,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                 pageController.jumpToPage(tabIndex);
               },
               tabs: [
-                Tab(
-                    iconMargin: iconMargin,
-                    icon: Icon(MaterialCommunityIcons.home)),
+                // Tab(
+                //     iconMargin: iconMargin,
+                //     icon: Icon(MaterialCommunityIcons.home)),
                 Tab(
                     iconMargin: iconMargin,
                     icon: Icon(MaterialCommunityIcons.account_search)),
@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           },
           pageSnapping: true,
           controller: pageController,
-          children: [UserFeed(), SearchUserScreen(), MyProfileScreen()],
+          children: [ SearchUserScreen(), MyProfileScreen()],
         ));
   }
 }
