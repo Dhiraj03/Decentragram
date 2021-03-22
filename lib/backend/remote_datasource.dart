@@ -17,7 +17,7 @@ class RemoteDataSource {
   static const String maticURL =
       'https://mainnet-api.maticvigil.com/v1.0/contract/';
   static const String contractAddress =
-      "0x38fa5194cb8326b6b22d9c627cc76a0134012258";
+      "0x475e91935893b096c12e2746ea293d66329e22b8";
   String url = maticURL + contractAddress;
   String ipfs = 'https://ipfs.infura.io:5001/api/v0/add?pin=false';
   String apiKey = 'd4fdc5d6-ce7b-4624-ba95-7ba359ca3bdd';
@@ -302,7 +302,7 @@ class RemoteDataSource {
           options: Options(headers: {
             "X-API-KEY": [apiKey]
           }, contentType: Headers.formUrlEncodedContentType));
-      print(response.toString());
+      print("Response" + response.toString());
       return Right(response.data["data"][0]["txHash"]);
     } catch (e) {
       return Left(ErrorMessage(message: "Error!"));

@@ -145,7 +145,116 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           iconSize: 25,
                                           icon: Icon(MaterialCommunityIcons
                                               .comment_outline),
-                                          onPressed: () {}),
+                                          onPressed: () {
+                                            Scaffold.of(context)
+                                                .showBottomSheet((context) {
+                                              TextEditingController
+                                                  commentController =
+                                                  TextEditingController();
+
+                                              return Scaffold(
+                                                floatingActionButton:
+                                                    FloatingActionButton(
+                                                        elevation: 0,
+                                                        backgroundColor:
+                                                            sheetColor,
+                                                        child: Icon(
+                                                          MaterialCommunityIcons
+                                                              .close,
+                                                          color: primaryColor,
+                                                        ),
+                                                        onPressed: () {
+                                                          Router.navigator
+                                                              .pop();
+                                                        }),
+                                                body: Column(children: <Widget>[
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Center(
+                                                    child: Text(
+                                                      'Comments',
+                                                      style: TextStyle(
+                                                          fontSize: 25),
+                                                    ),
+                                                  ),
+                                                  ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: state
+                                                        .posts[index]
+                                                        .commentCount,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int i) {
+                                                      return ListTile(
+                                                        title: Text(state
+                                                            .posts[index]
+                                                            .comments[i]
+                                                            .username),
+                                                        subtitle: Text(
+                                                          state
+                                                              .posts[index]
+                                                              .comments[i]
+                                                              .content,
+                                                          style: TextStyle(
+                                                              color: grey),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 40, top: 40),
+                                                    child: ListTile(
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      trailing: IconButton(
+                                                          icon: Icon(
+                                                            MaterialCommunityIcons
+                                                                .send,
+                                                            color: primaryColor,
+                                                          ),
+                                                          onPressed: () {
+                                                            Router.navigator
+                                                                .pop();
+                                                            bloc
+                                                              ..add(AddComment(
+                                                                  followAddress: state
+                                                                      .profile
+                                                                      .userAddress,
+                                                                  comment:
+                                                                      commentController
+                                                                          .text,
+                                                                  postID: index,
+                                                                  userAddress: state
+                                                                      .profile
+                                                                      .userAddress));
+                                                          }),
+                                                      leading: CircleAvatar(
+                                                        backgroundImage:
+                                                            MemoryImage(state
+                                                                .profile
+                                                                .profileImage),
+                                                      ),
+                                                      title: TextFormField(
+                                                        cursorWidth: 1.5,
+                                                        controller:
+                                                            commentController,
+                                                        decoration: InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets.only(
+                                                                    left: 10),
+                                                            hintText:
+                                                                "Add a comment",
+                                                            border:
+                                                                OutlineInputBorder()),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ]),
+                                              );
+                                            });
+                                          }),
                                       Text(state.posts[index].commentCount
                                           .toString()),
                                     ],
@@ -251,9 +360,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       height: 10,
                                                     ),
                                                     Center(
-                                                      child: Text('Comments', style: TextStyle(
-                                                        fontSize: 25
-                                                      ),),
+                                                      child: Text(
+                                                        'Comments',
+                                                        style: TextStyle(
+                                                            fontSize: 25),
+                                                      ),
                                                     ),
                                                     ListView.builder(
                                                       shrinkWrap: true,
@@ -268,11 +379,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                               .posts[index]
                                                               .comments[i]
                                                               .username),
-                                                          
-                                                          subtitle: Text(state
-                                                              .posts[index]
-                                                              .comments[i]
-                                                              .content, style: TextStyle(color: grey),),
+                                                          subtitle: Text(
+                                                            state
+                                                                .posts[index]
+                                                                .comments[i]
+                                                                .content,
+                                                            style: TextStyle(
+                                                                color: grey),
+                                                          ),
                                                         );
                                                       },
                                                     ),
@@ -291,10 +405,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             ),
                                                             onPressed: () {
                                                               Router.navigator
-                                                              .pop();
+                                                                  .pop();
                                                               bloc
                                                                 ..add(AddComment(
-                                                                    followAddress: state.profile.userAddress,
+                                                                    followAddress: state
+                                                                        .profile
+                                                                        .userAddress,
                                                                     comment:
                                                                         commentController
                                                                             .text,
@@ -303,7 +419,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                     userAddress: state
                                                                         .profile
                                                                         .userAddress));
-                                                              
                                                             }),
                                                         leading: CircleAvatar(
                                                           backgroundImage:
@@ -349,7 +464,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 child: CircularProgressIndicator(),
               );
           },
-          listener: (BuildContext context, UserState state) {},
+          listener: (BuildContext context, UserState state) {
+            if (state is Success) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: secondaryColor,
+              ));
+            }
+          },
         ),
       ),
     );

@@ -20,8 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   TabController tabController;
   @override
   void initState() {
-    pageController = PageController(initialPage: 0);
-    tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    pageController = PageController(initialPage: 2);
+    tabController = TabController(length: 3, vsync: this, initialIndex: 2);
     super.initState();
   }
 
@@ -46,8 +46,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     iconMargin: iconMargin,
                     icon: Icon(MaterialCommunityIcons.account_search)),
                 Tab(
-                iconMargin: iconMargin,
-                icon: Icon(FlutterIcons.account_box_mco)),
+                    iconMargin: iconMargin,
+                    icon: Icon(FlutterIcons.account_box_mco)),
               ]),
         ),
         body: PageView(

@@ -37,15 +37,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield Loading();
       bool self;
       String address = (await repo.getUser()).username;
-      print(address);
+      print("Address" + address);
       self = (address == event.username);
-      if (self) yield Failure(errorMessage: "User not found!");
-      String result = await repo.searchUser(event.username);
-      if (result == null) {
+      print(self);
+      if (self) {
         yield Failure(errorMessage: "User not found!");
       } else {
-        UserModel user = await backend.getUser(result);
-        yield UserFound(user: user);
+        String result = await repo.searchUser(event.username);
+        if (result == null) {
+          yield Failure(errorMessage: "User not found!");
+        } else {
+          UserModel user = await backend.getUser(result);
+          yield UserFound(user: user);
+        }
       }
     } else if (event is GetMyProfile) {
       //retrieves the user's profile - username, userAddress, posts and DP
@@ -127,7 +131,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is AddComment) {
       //Likes the post - userAddress is the OWNER of the post, followAddress wants to comment on the post
       yield Loading();
-      await backend.comment(
+      var response = await backend.comment(
           event.userAddress, event.postID, event.followAddress, event.comment);
       String userAddress = event.userAddress;
       UserModel user = await backend.getUserProfile(userAddress);

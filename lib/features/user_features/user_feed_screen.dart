@@ -18,7 +18,7 @@ class _UserFeedState extends State<UserFeed> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UserBloc>(
-      create: (_) => bloc..add(GetUserPosts(self: true)),
+      create: (_) => bloc,
       child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -41,19 +41,9 @@ class _UserFeedState extends State<UserFeed> {
           ),
           body: BlocConsumer<UserBloc, UserState>(
               builder: (BuildContext context, UserState state) {
-                if (state is UserPosts) {
-                  return ListView.builder(
-                      itemCount: state.posts.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (state.posts[index].isImage)
-                          return Text('image');
-                        else
-                          return Text(state.posts[index].text);
-                      });
-                } else
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                return Center(
+                  child: Text('Dashboard'),
+                );
               },
               listener: (BuildContext context, UserState state) {})),
     );
