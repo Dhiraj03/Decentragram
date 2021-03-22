@@ -101,10 +101,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is GetSearchUserProfile) {
       //Gets the profile of the user that has been searched for
       yield Loading();
-      String address = (await repo.getUser()).userAddress;
+      String followAddress = (await repo.getUser()).userAddress;
+      String userAddress = event.userAddress;
       //Indicates if the user already follows the profile that has been searched for
-      bool follow = await backend.doesFollowProfile(address, event.userAddress);
-      yield SearchUserProfile(following: follow);
+      bool follow =
+          await backend.doesFollowProfile(followAddress, userAddress);
+      UserModel user = await backend.getUserProfile(userAddress);
+      List<PostModel> posts =
+          await backend.getUserPosts(userAddress, followAddress);
+      yield SearchUserProfile(following: follow, user: user, posts: posts, followAddress: followAddress);
     } else if (event is FollowProfile) {
       //The two specified addresses follow each other
       String address = (await repo.getUser()).userAddress;
