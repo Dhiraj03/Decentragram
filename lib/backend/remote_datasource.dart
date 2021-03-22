@@ -204,7 +204,8 @@ class RemoteDataSource {
       var isLiked = await hasLiked(userAddress, followAddress, id);
       List<Comment> comments = await getAllComments(
           userAddress, id, response.data["data"][0]["commentCount"]);
-      return PostModel.imagePost(response.data["data"][0], image, isLiked, comments);
+      return PostModel.imagePost(
+          response.data["data"][0], image, isLiked, comments);
     } else {
       print(ipfsHash);
       var image;
@@ -219,9 +220,9 @@ class RemoteDataSource {
           ));
       var isLiked = await hasLiked(userAddress, followAddress, id);
       List<Comment> comments = await getAllComments(
-      userAddress, id, response.data["data"][0]["commentCount"]);
-      return PostModel.textPost(
-          response.data["data"][0], utf8.decode(ipfsResponse.data), isLiked, comments);
+          userAddress, id, response.data["data"][0]["commentCount"]);
+      return PostModel.textPost(response.data["data"][0],
+          utf8.decode(ipfsResponse.data), isLiked, comments);
     }
   }
 
@@ -276,6 +277,27 @@ class RemoteDataSource {
     };
     try {
       var response = await dioClient.post(url + "/likePost",
+          data: requestMap,
+          options: Options(headers: {
+            "X-API-KEY": [apiKey]
+          }, contentType: Headers.formUrlEncodedContentType));
+      print(response.toString());
+      return Right(response.data["data"][0]["txHash"]);
+    } catch (e) {
+      return Left(ErrorMessage(message: "Error!"));
+    }
+  }
+
+  Future<void> comment(String userAddress, int postID, String followAddress,
+      String content) async {
+    Map<String, dynamic> requestMap = {
+      "userAddress": userAddress,
+      "postID": postID,
+      "followAddress": followAddress,
+      "content": content
+    };
+    try {
+      var response = await dioClient.post(url + "/comment",
           data: requestMap,
           options: Options(headers: {
             "X-API-KEY": [apiKey]
