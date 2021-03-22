@@ -39,7 +39,6 @@ class PostModel {
 
   factory PostModel.textPost(
       Map<String, dynamic> json, String text, bool isLiked, List<Comment> comments) {
-    print('lol');
     return PostModel(
         isLiked: isLiked,
         likeCount: json["likeCount"],

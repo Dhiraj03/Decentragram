@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:decentragram/backend/local_datasource.dart';
 import 'package:decentragram/core/errors.dart';
 import 'package:decentragram/database/firestore_repository.dart';
+import 'package:decentragram/models/comment_model.dart';
 import 'package:decentragram/models/post_model.dart';
 import 'package:decentragram/models/user_model.dart';
 import 'package:dio/dio.dart';
@@ -201,9 +202,9 @@ class RemoteDataSource {
         },
       ));
       var isLiked = await hasLiked(userAddress, followAddress, id);
-      print("isLiked");
-      print(isLiked);
-      return PostModel.imagePost(response.data["data"][0], image, isLiked);
+      List<Comment> comments = await getAllComments(
+          userAddress, id, response.data["data"][0]["commentCount"]);
+      return PostModel.imagePost(response.data["data"][0], image, isLiked, comments);
     } else {
       print(ipfsHash);
       var image;
@@ -217,10 +218,10 @@ class RemoteDataSource {
             },
           ));
       var isLiked = await hasLiked(userAddress, followAddress, id);
-      print("isLiked");
-      print(isLiked);
+      List<Comment> comments = await getAllComments(
+      userAddress, id, response.data["data"][0]["commentCount"]);
       return PostModel.textPost(
-          response.data["data"][0], utf8.decode(ipfsResponse.data), isLiked);
+          response.data["data"][0], utf8.decode(ipfsResponse.data), isLiked, comments);
     }
   }
 
@@ -239,6 +240,23 @@ class RemoteDataSource {
       posts.add(post);
     }
     return posts;
+  }
+
+  Future<Comment> getComment(
+      String userAddress, int postID, int commentID) async {
+    var response = await dioClient
+        .get(url + "/getPostComment/$userAddress/$postID/$commentID");
+    return Comment.fromJson(response.data["data"][0]);
+  }
+
+  Future<List<Comment>> getAllComments(
+      String userAddress, int postID, int commentCount) async {
+    List<Comment> comments = [];
+    for (int i = 0; i < commentCount; i++) {
+      Comment tempComment = await getComment(userAddress, postID, i);
+      comments.add(tempComment);
+    }
+    return comments;
   }
 
   Future<bool> hasLiked(
