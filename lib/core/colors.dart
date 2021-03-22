@@ -6,5 +6,6 @@ Color successColor = Colors.green[600];
 Color red = Colors.red;
 Color failureColor = Colors.red[700];
 Color grey = Colors.grey[600];
+Color sheetColor = Colors.black54;
 Color white = Colors.white;
 Color bgColor = Color(0xFFF2F2F2);

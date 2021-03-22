@@ -3,6 +3,7 @@ import 'package:decentragram/core/dimens.dart';
 import 'package:decentragram/core/util.dart';
 import 'package:decentragram/features/auth/presentation/bloc/auth_bloc/auth_barrel_bloc.dart';
 import 'package:decentragram/features/user_features/user_bloc/user_bloc.dart';
+import 'package:decentragram/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -223,16 +224,111 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               color: secondaryColor),
                                           onPressed: () {
                                             Scaffold.of(context)
-                                                .showBottomSheet((context) {
-                                                  return Container(
-                                                    height: 400,
-                                                    color: grey,
-                                                    child: ListView(
-                                                      
-                                                    ),
-                                                  );
+                                                .showBottomSheet(
+                                              (context) {
+                                                TextEditingController
+                                                    commentController =
+                                                    TextEditingController();
 
-                                                });
+                                                return Scaffold(
+                                                  floatingActionButton:
+                                                      FloatingActionButton(
+                                                          elevation: 0,
+                                                          backgroundColor:
+                                                              sheetColor,
+                                                          child: Icon(
+                                                            MaterialCommunityIcons
+                                                                .close,
+                                                            color: primaryColor,
+                                                          ),
+                                                          onPressed: () {
+                                                            Router.navigator
+                                                                .pop();
+                                                          }),
+                                                  body:
+                                                      Column(children: <Widget>[
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Center(
+                                                      child: Text('Comments', style: TextStyle(
+                                                        fontSize: 25
+                                                      ),),
+                                                    ),
+                                                    ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: state
+                                                          .posts[index]
+                                                          .commentCount,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int i) {
+                                                        return ListTile(
+                                                          title: Text(state
+                                                              .posts[index]
+                                                              .comments[i]
+                                                              .username),
+                                                          
+                                                          subtitle: Text(state
+                                                              .posts[index]
+                                                              .comments[i]
+                                                              .content, style: TextStyle(color: grey),),
+                                                        );
+                                                      },
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 40, top: 40),
+                                                      child: ListTile(
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        trailing: IconButton(
+                                                            icon: Icon(
+                                                              MaterialCommunityIcons
+                                                                  .send,
+                                                              color:
+                                                                  primaryColor,
+                                                            ),
+                                                            onPressed: () {
+                                                              Router.navigator
+                                                              .pop();
+                                                              bloc
+                                                                ..add(AddComment(
+                                                                    comment:
+                                                                        commentController
+                                                                            .text,
+                                                                    postID:
+                                                                        index,
+                                                                    userAddress: state
+                                                                        .profile
+                                                                        .userAddress));
+                                                              
+                                                            }),
+                                                        leading: CircleAvatar(
+                                                          backgroundImage:
+                                                              MemoryImage(state
+                                                                  .profile
+                                                                  .profileImage),
+                                                        ),
+                                                        title: TextFormField(
+                                                          cursorWidth: 1.5,
+                                                          controller:
+                                                              commentController,
+                                                          decoration: InputDecoration(
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      left: 10),
+                                                              hintText:
+                                                                  "Add a comment",
+                                                              border:
+                                                                  OutlineInputBorder()),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                                );
+                                              },
+                                            );
                                           }),
                                       Text(state.posts[index].commentCount
                                           .toString()),
