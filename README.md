@@ -1,16 +1,10 @@
-# decentragram
+## Overview of Matic and reasons for its use
 
-A new Flutter project.
+1. The current decentralized eco-system lacks usability and convenience and transactions are slow, expensive and complex. Many blockchain applications haven’t reached a stage of mass usage due to scalability and UI issues.
+2. Matic Network is a Layer 2 scaling solution that achieves scale by utilizing side chains for off-chain computation while ensuring asset security using the Plasma framework and a DPoS validators.
+3. MaticVigil API is an API gateway on top of the Matic network EVM-compatible sidechain which enables developers to write code to interact with value transfer and transactions on Matic as if it were just talking to a normal web server REST API over HTTP.
+4. Due to the primitive nature of web3 libraries in Dart, I have chosen to use Matic to deploy and communicate with the smart contract.
 
-## Getting Started
+![MaticVigil](matic.png)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+###### Source: https://medium.com/blockvigil/maticvigil-scalable-blockchain-api-for-everyone-2bc09489e602
